@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  DECLARANT
+  PSY
+  ADMIN_IT
+  DIR_VILLAGE
+  RESPONSABLE_SAUVEGARDE
+  DIR_NATIONAL
+}
+
+enum CaseStatus {
+  PENDING
+  IN_PROGRESS
+  FALSE_REPORT
+  CLOSED
+}
+
+enum Urgency {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentType {
+  HEALTH
+  BEHAVIOR
+  VIOLENCE
+  SEXUAL_ABUSE
+  NEGLECT
+  CONFLICT
+  OTHER
+}
+
+enum AssignmentRole {
+  PRIMARY
+  SECONDARY
+}
+
+enum DocumentType {
+  FICHE_INITIALE
+  RAPPORT_DPE
+}
+
+model Village {
+  id    String @id @default(cuid())
+  name  String @unique
+  users User[]
+  cases Case[]
+}
+
+model User {
+  id           String @id @default(cuid())
+  name         String
+  email        String @unique
+  passwordHash String
+  role         Role
+  villageId    String?
+  village      Village? @relation(fields: [villageId], references: [id])
+
+  casesCreated  Case[] @relation("CreatedCases")
+  assignments   CaseAssignment[]
+  documents     CaseDocument[]
+  attachments   Attachment[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+model Case {
+  id            String @id @default(cuid())
+  createdById   String
+  createdBy     User   @relation("CreatedCases", fields: [createdById], references: [id])
+  isAnonymous   Boolean @default(false)
+
+  villageId     String
+  village       Village @relation(fields: [villageId], references: [id])
+
+  incidentType  IncidentType
+  urgency       Urgency
+
+  abuserName    String?
+  childName     String?
+  description   String?
+
+  status        CaseStatus @default(PENDING)
+  score         Int        @default(0)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  attachments   Attachment[]
+  assignments   CaseAssignment[]
+  documents     CaseDocument[]
+  notifications Notification[]
+}
+
+model Attachment {
+  id           String @id @default(cuid())
+  caseId       String
+  case         Case   @relation(fields: [caseId], references: [id])
+
+  filename     String
+  mimeType     String
+  path         String
+  sizeBytes    Int
+
+  uploadedById String
+  uploadedBy   User @relation(fields: [uploadedById], references: [id])
+
+  createdAt    DateTime @default(now())
+}
+
+model CaseAssignment {
+  id              String @id @default(cuid())
+  caseId          String
+  psychologistId  String
+  assignmentRole  AssignmentRole
+
+  case            Case @relation(fields: [caseId], references: [id])
+  psychologist    User @relation(fields: [psychologistId], references: [id])
+
+  assignedAt      DateTime @default(now())
+
+  @@unique([caseId, psychologistId])
+}
+
+model CaseDocument {
+  id           String @id @default(cuid())
+  caseId       String
+  case         Case   @relation(fields: [caseId], references: [id])
+
+  docType      DocumentType
+  filename     String
+  mimeType     String
+  path         String
+  sizeBytes    Int
+
+  uploadedById String
+  uploadedBy   User @relation(fields: [uploadedById], references: [id])
+
+  createdAt    DateTime @default(now())
+
+  @@index([caseId, docType])
+}
+
+model Notification {
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
+
+  caseId    String?
+  case      Case?  @relation(fields: [caseId], references: [id])
+
+  type      String
+  message   String
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String @id @default(cuid())
+  actorId   String
+  actor     User   @relation(fields: [actorId], references: [id])
+
+  action    String
+  entity    String
+  entityId  String
+  metaJson  String?
+
+  createdAt DateTime @default(now())
+}
