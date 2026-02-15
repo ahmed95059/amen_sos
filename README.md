@@ -1,10 +1,8 @@
-# SOS Tunisie - Child Protection Case Management System
+# AmenSOS - Child Protection Case Management System
 
-[![GitHub Repository](https://img.shields.io/badge/GitHub-sos--hackathon-blue?logo=github)](https://github.com/ahmed95059/sos-hackathon)
 
 A comprehensive child protection case management platform built for SOS Villages d'Enfants Tunisie, enabling secure reporting, tracking, and management of child welfare incidents with role-based access control and multi-level approval workflows.
 
-**GitHub Repository**: [https://github.com/ahmed95059/sos-hackathon](https://github.com/ahmed95059/sos-hackathon)
 
 ## 📋 Table of Contents
 
@@ -14,11 +12,14 @@ A comprehensive child protection case management platform built for SOS Villages
 - [Architecture](#architecture)
 - [Role-Based Access Control](#role-based-access-control)
 - [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Development Workflow](#development-workflow)
 - [Testing](#testing)
-- [Contributing](#contributing)
+- [Security Considerations](#security-considerations)
+- [License](#license)
+
 
 ---
 
@@ -127,7 +128,7 @@ This system was developed for the SOS Tunisie hackathon to digitize and streamli
 
 ### Case Management Workflow
 
-![Workflow Diagram](workflow-diagram.png)
+![Workflow Diagram](https://i.imgur.com/MDFJp29.png)
 
 The diagram above illustrates the complete case management workflow:
 
@@ -150,41 +151,8 @@ The diagram above illustrates the complete case management workflow:
 
 The system implements a comprehensive RBAC system with 6 distinct roles:
 
-![Role-Based Access Control](roles.png)
+![Role-Based Access Control](https://i.imgur.com/XRI8RYm.png)
 
-### 1. **NORMAL** (Personnel: mère, tante, éducateur)
-- ✅ Create tickets (signalements)
-- ✅ View own tickets only
-- ❌ No access to cases, reports, or analytics
-
-### 2. **PSY** (Psychologist)
-- ✅ View assigned village cases
-- ✅ Write reports (Fiche Initiale, DPE)
-- ✅ Full sensitive content access (assigned cases)
-- ✅ Close cases (conditional: after all signatures)
-- ❌ Cannot approve/sign
-
-### 3. **DIR_VILLAGE** (Village Director)
-- ✅ View all village cases
-- ✅ Approve/sign action plans
-- ✅ Limited sensitive content access
-- ❌ Cannot write reports
-
-### 4. **RESPONSABLE_SAUVEGARDE** (Child Protection Officer)
-- ✅ **View ALL villages cases** (unique global access)
-- ✅ Approve/sign action plans
-- ✅ Full sensitive content access (all cases)
-- ❌ Cannot write reports
-
-### 5. **DIR_NATIONAL** (National Director)
-- ✅ **View national analytics only** (aggregated stats)
-- ❌ Cannot view individual cases or sensitive content
-
-### 6. **ADMIN_IT** (IT Administrator)
-- ✅ **User management only** (create, edit, delete users)
-- ❌ No access to cases or content
-
-**All 84 RBAC permission tests pass with 100% success rate.**
 
 ---
 
@@ -319,6 +287,64 @@ amen_sos/
         └── package.json
 ```
 
+## .ENV EXAMPLE
+# BACKEND
+```
+# ===============================
+# Server Configuration
+# ===============================
+PORT=4000
+
+# ===============================
+# Database
+# ===============================
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public
+
+# ===============================
+# Authentication
+# ===============================
+JWT_SECRET=your_super_secret_here
+
+# ===============================
+# File Upload
+# ===============================
+UPLOAD_DIR=./uploads
+MAX_UPLOAD_MB=150
+
+# ===============================
+# Email (SMTP)
+# ===============================
+EMAIL_ADDRESS=your_email@gmail.com
+EMAIL_PASSWORD=your_email_app_password
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+
+# ===============================
+# WhatsApp (Twilio)
+# ===============================
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+
+# ===============================
+# Reminder Scheduler
+# ===============================
+PENDING_REMINDER_INTERVAL_MIN=15
+```
+# Frontend Configuration (Next.js)
+
+```
+
+
+# GraphQL endpoint URL
+NEXT_PUBLIC_GRAPHQL_URL=http://localhost:4000/graphql
+
+# Backend REST API base URL
+NEXT_PUBLIC_API_URL=http://localhost:4000
+
+# Enable mock data (true | false)
+NEXT_PUBLIC_USE_MOCK_DATA=false
+```
 ---
 
 ## 📡 API Documentation
@@ -502,30 +528,14 @@ Triggered on:
 ## 📝 License
 
 This project was created for the SOS Tunisie hackathon. All rights reserved.
+TEAM:
 
----
+Mohamed Amine MSADDAK
 
-## 👥 Contributing
+Ahmed BAYA CHATTI
 
-This is a hackathon project. Contributions are welcome!
+Jawher ESSID
 
-1. Fork the repository: [https://github.com/ahmed95059/sos-hackathon](https://github.com/ahmed95059/sos-hackathon)
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -am 'Add new feature'`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Submit a Pull Request
-
-For questions or support, please open an issue on GitHub.
-
----
-
-## 📧 Support
-
-For technical support or questions:
-- Backend issues: Check GraphQL playground at http://localhost:4000/graphql
-- Frontend issues: Check browser console and Next.js dev tools
-- Database issues: Use `npx prisma studio` to inspect data
-
----
+Salma IBN CHEIKH
 
 **Built with ❤️ for SOS Villages d'Enfants Tunisie**
