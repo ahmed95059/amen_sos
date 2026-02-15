@@ -19,6 +19,7 @@ enum Role {
 enum CaseStatus {
   PENDING
   IN_PROGRESS
+  SIGNED
   FALSE_REPORT
   CLOSED
 }
@@ -72,6 +73,8 @@ model User {
   attachments   Attachment[]
   notifications Notification[]
   auditLogs     AuditLog[]
+  dirVillageValidatedCases      Case[] @relation("DirVillageValidatedCases")
+  sauvegardeValidatedCases      Case[] @relation("SauvegardeValidatedCases")
 }
 
 model Case {
@@ -92,6 +95,16 @@ model Case {
 
   status        CaseStatus @default(PENDING)
   score         Int        @default(0)
+
+  dirVillageValidatedAt   DateTime?
+  dirVillageSignature     String?
+  dirVillageValidatedById String?
+  dirVillageValidatedBy   User? @relation("DirVillageValidatedCases", fields: [dirVillageValidatedById], references: [id])
+
+  sauvegardeValidatedAt   DateTime?
+  sauvegardeSignature     String?
+  sauvegardeValidatedById String?
+  sauvegardeValidatedBy   User? @relation("SauvegardeValidatedCases", fields: [sauvegardeValidatedById], references: [id])
 
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt

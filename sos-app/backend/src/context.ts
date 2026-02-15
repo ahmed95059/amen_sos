@@ -14,7 +14,7 @@ export type Context = {
 export async function buildContext(req: any): Promise<Context> {
   const jwtSecret = process.env.JWT_SECRET!;
   const uploadDir = process.env.UPLOAD_DIR || "./uploads";
-  const maxUploadMb = Number(process.env.MAX_UPLOAD_MB || "12");
+  const maxUploadMb = Number(process.env.MAX_UPLOAD_MB || "50");
   const maxUploadBytes = maxUploadMb * 1024 * 1024;
 
   const authHeader = req.headers?.authorization || "";

@@ -40,16 +40,48 @@ export const resolvers = {
         if (!assigned) throw new Error("FORBIDDEN");
       }
 
+      if (u.role === Role.DIR_VILLAGE && u.villageId !== c.villageId) throw new Error("FORBIDDEN");
+
       return c;
     },
 
     psyAssignedCases: async (_: any, args: { status?: CaseStatus }, ctx: Context) => {
       const u = requireRole(ctx, [Role.PSY]);
+      if (!u.villageId) return [];
 
       return ctx.prisma.case.findMany({
         where: {
+          villageId: u.villageId,
           assignments: { some: { psychologistId: u.id } },
-          ...(args.status ? { status: args.status } : {}),
+          ...(args.status
+            ? { status: args.status }
+            : { status: { in: [CaseStatus.PENDING, CaseStatus.IN_PROGRESS, CaseStatus.SIGNED] } }),
+        },
+        orderBy: [{ score: "desc" }, { createdAt: "asc" }],
+        include: baseCaseIncludes(),
+      });
+    },
+
+    dirVillageCases: async (_: any, __: any, ctx: Context) => {
+      const u = requireRole(ctx, [Role.DIR_VILLAGE]);
+      if (!u.villageId) return [];
+
+      return ctx.prisma.case.findMany({
+        where: {
+          villageId: u.villageId,
+          status: CaseStatus.IN_PROGRESS,
+        },
+        orderBy: [{ score: "desc" }, { createdAt: "asc" }],
+        include: baseCaseIncludes(),
+      });
+    },
+
+    sauvegardeCases: async (_: any, __: any, ctx: Context) => {
+      requireRole(ctx, [Role.RESPONSABLE_SAUVEGARDE]);
+
+      return ctx.prisma.case.findMany({
+        where: {
+          dirVillageValidatedAt: { not: null },
         },
         orderBy: [{ score: "desc" }, { createdAt: "asc" }],
         include: baseCaseIncludes(),
@@ -179,6 +211,18 @@ export const resolvers = {
       });
       if (!assigned) throw new Error("FORBIDDEN");
 
+      const current = await ctx.prisma.case.findUnique({
+        where: { id: args.caseId },
+        select: { id: true, status: true },
+      });
+      if (!current) throw new Error("NOT_FOUND");
+      if (current.status === CaseStatus.SIGNED && args.status !== CaseStatus.CLOSED) {
+        throw new Error("SIGNED_CASE_CAN_ONLY_BE_CLOSED");
+      }
+      if (args.status === CaseStatus.CLOSED && current.status !== CaseStatus.SIGNED) {
+        throw new Error("ONLY_SIGNED_CASE_CAN_BE_CLOSED");
+      }
+
       const updated = await ctx.prisma.case.update({
         where: { id: args.caseId },
         data: { status: args.status },
@@ -242,6 +286,111 @@ export const resolvers = {
       return doc;
     },
 
+    dirVillageValidateCase: async (_: any, args: { caseId: string; signatureFile: FileInput }, ctx: Context) => {
+      const u = requireRole(ctx, [Role.DIR_VILLAGE]);
+      if (!u.villageId) throw new Error("FORBIDDEN");
+      if (!args.signatureFile?.base64) throw new Error("SIGNATURE_REQUIRED");
+      if (!isSupportedSignatureFile(args.signatureFile)) throw new Error("SIGNATURE_FILE_UNSUPPORTED");
+
+      const c = await ctx.prisma.case.findUnique({
+        where: { id: args.caseId },
+        include: { documents: true },
+      });
+      if (!c || c.villageId !== u.villageId) throw new Error("FORBIDDEN");
+      if (c.status !== CaseStatus.IN_PROGRESS) throw new Error("INVALID_CASE_STATUS");
+      if (!hasRequiredDocuments(c.documents)) throw new Error("MISSING_REQUIRED_DOCUMENTS");
+
+      const savedSignature = saveFileToDisk({
+        uploadRoot: ctx.uploadDir,
+        subdir: `cases/${args.caseId}/signatures/dir_village`,
+        file: args.signatureFile,
+        maxBytes: ctx.maxUploadBytes,
+      });
+
+      const updated = await ctx.prisma.case.update({
+        where: { id: args.caseId },
+        data: {
+          dirVillageValidatedAt: new Date(),
+          dirVillageSignature: savedSignature.path,
+          dirVillageValidatedById: u.id,
+        },
+        include: baseCaseIncludes(),
+      });
+
+      await ctx.prisma.auditLog.create({
+        data: {
+          actorId: u.id,
+          action: "DIR_VILLAGE_VALIDATE_CASE",
+          entity: "Case",
+          entityId: updated.id,
+          metaJson: JSON.stringify({ signatureFile: savedSignature.filename }),
+        },
+      });
+
+      return updated;
+    },
+
+    sauvegardeValidateCase: async (_: any, args: { caseId: string; signatureFile: FileInput }, ctx: Context) => {
+      const u = requireRole(ctx, [Role.RESPONSABLE_SAUVEGARDE]);
+      if (!args.signatureFile?.base64) throw new Error("SIGNATURE_REQUIRED");
+      if (!isSupportedSignatureFile(args.signatureFile)) throw new Error("SIGNATURE_FILE_UNSUPPORTED");
+
+      const c = await ctx.prisma.case.findUnique({
+        where: { id: args.caseId },
+        include: { documents: true },
+      });
+      if (!c) throw new Error("NOT_FOUND");
+      if (c.status !== CaseStatus.IN_PROGRESS) throw new Error("INVALID_CASE_STATUS");
+      if (!c.dirVillageValidatedAt) throw new Error("DIR_VILLAGE_VALIDATION_REQUIRED");
+      if (!hasRequiredDocuments(c.documents)) throw new Error("MISSING_REQUIRED_DOCUMENTS");
+      if (!c.dirVillageSignature) throw new Error("DIR_VILLAGE_SIGNATURE_REQUIRED");
+
+      const savedSignature = saveFileToDisk({
+        uploadRoot: ctx.uploadDir,
+        subdir: `cases/${args.caseId}/signatures/sauvegarde`,
+        file: args.signatureFile,
+        maxBytes: ctx.maxUploadBytes,
+      });
+
+      const updated = await ctx.prisma.case.update({
+        where: { id: args.caseId },
+        data: {
+          status: CaseStatus.SIGNED,
+          sauvegardeValidatedAt: new Date(),
+          sauvegardeSignature: savedSignature.path,
+          sauvegardeValidatedById: u.id,
+        },
+        include: baseCaseIncludes(),
+      });
+
+      const villagePsychologists = await ctx.prisma.user.findMany({
+        where: { role: Role.PSY, villageId: c.villageId },
+        select: { id: true },
+      });
+      if (villagePsychologists.length > 0) {
+        await ctx.prisma.notification.createMany({
+          data: villagePsychologists.map((p) => ({
+            userId: p.id,
+            caseId: c.id,
+            type: "CASE_SIGNED",
+            message: "Signalement signé par Responsable Sauvegarde. Prêt à clôturer.",
+          })),
+        });
+      }
+
+      await ctx.prisma.auditLog.create({
+        data: {
+          actorId: u.id,
+          action: "SAUVEGARDE_VALIDATE_CASE",
+          entity: "Case",
+          entityId: updated.id,
+          metaJson: JSON.stringify({ signatureFile: savedSignature.filename }),
+        },
+      });
+
+      return updated;
+    },
+
     markNotificationRead: async (_: any, args: { id: string }, ctx: Context) => {
       const u = requireAuth(ctx);
       const notif = await ctx.prisma.notification.findUnique({ where: { id: args.id } });
@@ -276,7 +425,33 @@ export const resolvers = {
     documents: (parent: any, _: any, ctx: Context) =>
       ctx.prisma.caseDocument.findMany({ where: { caseId: parent.id }, orderBy: { createdAt: "desc" } }),
   },
+
+  Attachment: {
+    downloadUrl: (parent: any) => `/files/attachments/${parent.id}`,
+  },
+
+  CaseDocument: {
+    downloadUrl: (parent: any) => `/files/documents/${parent.id}`,
+  },
 };
+
+function hasRequiredDocuments(docs: Array<{ docType: DocumentType }>) {
+  let hasFiche = false;
+  let hasRapport = false;
+  for (const d of docs) {
+    if (d.docType === DocumentType.FICHE_INITIALE) hasFiche = true;
+    if (d.docType === DocumentType.RAPPORT_DPE) hasRapport = true;
+  }
+  return hasFiche && hasRapport;
+}
+
+function isSupportedSignatureFile(file: FileInput) {
+  const mime = file.mimeType || "";
+  const name = (file.filename || "").toLowerCase();
+  if (mime.startsWith("image/")) return true;
+  if (mime === "application/pdf") return true;
+  return name.endsWith(".pdf");
+}
 
 function baseCaseIncludes() {
   return {

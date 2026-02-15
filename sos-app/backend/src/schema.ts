@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 export const typeDefs = gql`
   enum Role { DECLARANT PSY ADMIN_IT DIR_VILLAGE RESPONSABLE_SAUVEGARDE DIR_NATIONAL }
-  enum CaseStatus { PENDING IN_PROGRESS FALSE_REPORT CLOSED }
+  enum CaseStatus { PENDING IN_PROGRESS SIGNED FALSE_REPORT CLOSED }
   enum Urgency { LOW MEDIUM HIGH CRITICAL }
   enum IncidentType { HEALTH BEHAVIOR VIOLENCE SEXUAL_ABUSE NEGLECT CONFLICT OTHER }
   enum DocumentType { FICHE_INITIALE RAPPORT_DPE }
@@ -22,6 +22,7 @@ export const typeDefs = gql`
     filename: String!
     mimeType: String!
     sizeBytes: Int!
+    downloadUrl: String!
     createdAt: String!
   }
 
@@ -31,6 +32,7 @@ export const typeDefs = gql`
     filename: String!
     mimeType: String!
     sizeBytes: Int!
+    downloadUrl: String!
     createdAt: String!
   }
 
@@ -62,6 +64,11 @@ export const typeDefs = gql`
     attachments: [Attachment!]!
     assignments: [CaseAssignment!]!
     documents: [CaseDocument!]!
+
+    dirVillageValidatedAt: String
+    dirVillageSignature: String
+    sauvegardeValidatedAt: String
+    sauvegardeSignature: String
   }
 
   type Notification {
@@ -100,6 +107,8 @@ export const typeDefs = gql`
     caseById(id: ID!): Case
 
     psyAssignedCases(status: CaseStatus): [Case!]!
+    dirVillageCases: [Case!]!
+    sauvegardeCases: [Case!]!
 
     myNotifications: [Notification!]!
   }
@@ -111,6 +120,8 @@ export const typeDefs = gql`
 
     psyUpdateCaseStatus(caseId: ID!, status: CaseStatus!): Case!
     psyUploadDocument(caseId: ID!, docType: DocumentType!, file: FileInput!): CaseDocument!
+    dirVillageValidateCase(caseId: ID!, signatureFile: FileInput!): Case!
+    sauvegardeValidateCase(caseId: ID!, signatureFile: FileInput!): Case!
 
     markNotificationRead(id: ID!): Notification!
   }
