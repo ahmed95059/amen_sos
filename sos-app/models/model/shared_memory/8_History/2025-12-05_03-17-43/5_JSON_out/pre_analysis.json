@@ -1,0 +1,206 @@
+{
+    "general_emotion": "Happiness",
+    "general_emotion_confidence": 0.999,
+    "drawing_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input.png",
+    "drawing_bw_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input_BW.png",
+    "objects": [
+        {
+            "id": "3844_tree",
+            "type": "tree",
+            "position": "bottom-left",
+            "size": "medium",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Anger",
+            "is_color_unusual": true,
+            "colors": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        204,
+                        75,
+                        37
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 601,
+                    "is_unusual": true
+                },
+                {
+                    "color_name": "green",
+                    "rgb": [
+                        34,
+                        163,
+                        47
+                    ],
+                    "emotion": "Calm",
+                    "proportion": 720,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "purple",
+                    "rgb": [
+                        80,
+                        72,
+                        146
+                    ],
+                    "emotion": "Fear",
+                    "proportion": 197,
+                    "is_unusual": true
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/3844_tree.png",
+            "confidence": 0.643
+        },
+        {
+            "id": "4814_house",
+            "type": "house",
+            "position": "bottom-center",
+            "size": "large",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Anger",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        208,
+                        58,
+                        11
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 15299,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        219,
+                        208,
+                        4
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 2838,
+                    "is_unusual": false
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/4814_house.png",
+            "confidence": 0.756
+        },
+        {
+            "id": "7428_tree",
+            "type": "tree",
+            "position": "bottom-right",
+            "size": "medium",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Calm",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "green",
+                    "rgb": [
+                        57,
+                        178,
+                        65
+                    ],
+                    "emotion": "Calm",
+                    "proportion": 661,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        241,
+                        218,
+                        33
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 240,
+                    "is_unusual": false
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/7428_tree.png",
+            "confidence": 0.296
+        },
+        {
+            "id": "7461_person",
+            "type": "person",
+            "position": "bottom-center",
+            "size": "large",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Anger",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        208,
+                        58,
+                        11
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 15282,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        219,
+                        209,
+                        4
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 2836,
+                    "is_unusual": false
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/7461_person.png",
+            "confidence": 0.309
+        }
+    ],
+    "facial_expressions": [],
+    "dominant_drawing_colors": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                219,
+                207,
+                9
+            ],
+            "emotion": "Happiness",
+            "proportion": 10828
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                107,
+                158,
+                168
+            ],
+            "emotion": "Sadness",
+            "proportion": 20750
+        },
+        {
+            "color_name": "green",
+            "rgb": [
+                12,
+                131,
+                23
+            ],
+            "emotion": "Calm",
+            "proportion": 12005
+        },
+        {
+            "color_name": "red",
+            "rgb": [
+                203,
+                58,
+                15
+            ],
+            "emotion": "Anger",
+            "proportion": 18163
+        }
+    ]
+}

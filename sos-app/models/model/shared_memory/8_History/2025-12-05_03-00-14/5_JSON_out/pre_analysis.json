@@ -1,0 +1,209 @@
+{
+    "general_emotion": "Fear",
+    "general_emotion_confidence": 0.514,
+    "drawing_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input.png",
+    "drawing_bw_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input_BW.png",
+    "objects": [
+        {
+            "id": "2087_tree",
+            "type": "tree",
+            "position": "bottom-center",
+            "size": "medium",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Sadness",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "gray",
+                    "rgb": [
+                        115,
+                        154,
+                        119
+                    ],
+                    "emotion": "Sadness",
+                    "proportion": 161,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        240,
+                        240,
+                        27
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 589,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "pink",
+                    "rgb": [
+                        184,
+                        194,
+                        193
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 680,
+                    "is_unusual": true
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/2087_tree.png",
+            "confidence": 0.604
+        },
+        {
+            "id": "5773_house",
+            "type": "house",
+            "position": "top-left",
+            "size": "medium",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Happiness",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "pink",
+                    "rgb": [
+                        235,
+                        183,
+                        211
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 676,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "pink",
+                    "rgb": [
+                        217,
+                        132,
+                        169
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 731,
+                    "is_unusual": false
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/5773_house.png",
+            "confidence": 0.7
+        },
+        {
+            "id": "7500_house",
+            "type": "house",
+            "position": "top-left",
+            "size": "medium",
+            "dominant_expression": null,
+            "dominant_emotion_hint": null,
+            "dominant_emotion_color": "Happiness",
+            "is_color_unusual": false,
+            "colors": [
+                {
+                    "color_name": "pink",
+                    "rgb": [
+                        233,
+                        187,
+                        211
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 749,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "pink",
+                    "rgb": [
+                        224,
+                        134,
+                        164
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 786,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "brown",
+                    "rgb": [
+                        187,
+                        60,
+                        61
+                    ],
+                    "emotion": "Calm",
+                    "proportion": 432,
+                    "is_unusual": false
+                }
+            ],
+            "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/7500_house.png",
+            "confidence": 0.772
+        }
+    ],
+    "facial_expressions": [
+        {
+            "id": "expr_888289d2",
+            "expression": "happy_face",
+            "mapped_emotion": "Happiness",
+            "dominant_emotion_color": null,
+            "colors": [],
+            "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_888289d2.png",
+            "confidence": 0.868
+        },
+        {
+            "id": "expr_37f25254",
+            "expression": "happy_face",
+            "mapped_emotion": "Happiness",
+            "dominant_emotion_color": null,
+            "colors": [],
+            "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_37f25254.png",
+            "confidence": 0.826
+        },
+        {
+            "id": "expr_883b26cd",
+            "expression": "happy_face",
+            "mapped_emotion": "Happiness",
+            "dominant_emotion_color": null,
+            "colors": [],
+            "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_883b26cd.png",
+            "confidence": 0.63
+        }
+    ],
+    "dominant_drawing_colors": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                94,
+                158,
+                165
+            ],
+            "emotion": "Sadness",
+            "proportion": 5418
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                226,
+                224,
+                68
+            ],
+            "emotion": "Happiness",
+            "proportion": 3056
+        },
+        {
+            "color_name": "green",
+            "rgb": [
+                40,
+                105,
+                74
+            ],
+            "emotion": "Calm",
+            "proportion": 2722
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                186,
+                195,
+                195
+            ],
+            "emotion": "Happiness",
+            "proportion": 6429
+        }
+    ]
+}

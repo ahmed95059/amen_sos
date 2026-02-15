@@ -1,0 +1,14 @@
+{
+    "label": "person",
+    "confidence": 0.30938848853111267,
+    "bbox": {
+        "x1": 113.15917205810547,
+        "y1": 118.4194107055664,
+        "x2": 352.7644348144531,
+        "y2": 424.794189453125
+    },
+    "position": "bottom-center",
+    "size": "large",
+    "id": "7461_person",
+    "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/7461_person.png"
+}

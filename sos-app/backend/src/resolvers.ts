@@ -3,13 +3,15 @@ import { Context, requireAuth, requireRole } from "./context";
 import { verifyPassword, signJwt } from "./auth";
 import { computeScore } from "./scoring";
 import { assignTwoPsychologists } from "./assignment";
-import { saveFileToDisk, FileInput } from "./storage";
+import { saveFileToDisk, decodeBase64, FileInput } from "./storage";
 import bcrypt from "bcryptjs";
 import {
   notifyPsychologistsOnCaseCreated,
   notifyDirectorWhenPsyDocsReady,
   notifySauvegardeAfterDirectorValidation,
+  notifyPsychologistsAfterDirectorSignedReports,
 } from "./notifications";
+import { signCasePdfDocuments } from "./pdf-signature";
 
 export const resolvers = {
   Query: {
@@ -376,6 +378,30 @@ export const resolvers = {
       if (!c || c.villageId !== u.villageId) throw new Error("FORBIDDEN");
       if (c.status !== CaseStatus.IN_PROGRESS) throw new Error("INVALID_CASE_STATUS");
       if (!hasRequiredDocuments(c.documents)) throw new Error("MISSING_REQUIRED_DOCUMENTS");
+      if (!isImageSignatureFile(args.signatureFile)) throw new Error("SIGNATURE_IMAGE_REQUIRED");
+
+      const docsToSign = pickLatestRequiredDocuments(c.documents as any);
+      if (docsToSign.length !== 2) throw new Error("MISSING_REQUIRED_DOCUMENTS");
+
+      const signatureBuffer = decodeBase64(args.signatureFile.base64);
+      const signedDocs = await signCasePdfDocuments({
+        uploadRoot: ctx.uploadDir,
+        caseId: args.caseId,
+        docs: docsToSign.map((d) => ({
+          id: d.id,
+          caseId: d.caseId,
+          docType: d.docType,
+          filename: d.filename,
+          mimeType: d.mimeType,
+          path: d.path,
+        })),
+        signatureBuffer,
+        signatureMimeType: args.signatureFile.mimeType,
+        signatureFilename: args.signatureFile.filename,
+        pages: "last",
+        widthMm: 45,
+        marginMm: 12,
+      });
 
       const savedSignature = saveFileToDisk({
         uploadRoot: ctx.uploadDir,
@@ -384,14 +410,28 @@ export const resolvers = {
         maxBytes: ctx.maxUploadBytes,
       });
 
-      const updated = await ctx.prisma.case.update({
-        where: { id: args.caseId },
-        data: {
-          dirVillageValidatedAt: new Date(),
-          dirVillageSignature: savedSignature.path,
-          dirVillageValidatedById: u.id,
-        },
-        include: baseCaseIncludes(),
+      const updated = await ctx.prisma.$transaction(async (tx) => {
+        for (const d of signedDocs) {
+          await tx.caseDocument.update({
+            where: { id: d.id },
+            data: {
+              filename: d.filename,
+              path: d.path,
+              sizeBytes: d.sizeBytes,
+              mimeType: d.mimeType,
+            },
+          });
+        }
+
+        return tx.case.update({
+          where: { id: args.caseId },
+          data: {
+            dirVillageValidatedAt: new Date(),
+            dirVillageSignature: savedSignature.path,
+            dirVillageValidatedById: u.id,
+          },
+          include: baseCaseIncludes(),
+        });
       });
 
       await ctx.prisma.auditLog.create({
@@ -400,11 +440,15 @@ export const resolvers = {
           action: "DIR_VILLAGE_VALIDATE_CASE",
           entity: "Case",
           entityId: updated.id,
-          metaJson: JSON.stringify({ signatureFile: savedSignature.filename }),
+          metaJson: JSON.stringify({
+            signatureFile: savedSignature.filename,
+            signedDocumentIds: signedDocs.map((d) => d.id),
+          }),
         },
       });
 
       await notifySauvegardeAfterDirectorValidation(ctx.prisma, args.caseId);
+      await notifyPsychologistsAfterDirectorSignedReports(ctx.prisma, args.caseId);
 
       return updated;
     },
@@ -596,6 +640,37 @@ function isSupportedSignatureFile(file: FileInput) {
   if (mime.startsWith("image/")) return true;
   if (mime === "application/pdf") return true;
   return name.endsWith(".pdf");
+}
+
+function isImageSignatureFile(file: FileInput) {
+  const mime = (file.mimeType || "").toLowerCase();
+  const name = (file.filename || "").toLowerCase();
+  if (mime.startsWith("image/")) return true;
+  return name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg");
+}
+
+function pickLatestRequiredDocuments(
+  docs: Array<{
+    id: string;
+    caseId: string;
+    docType: DocumentType;
+    filename: string;
+    mimeType: string;
+    path: string;
+    createdAt?: Date;
+  }>
+) {
+  const byType = new Map<DocumentType, typeof docs[number]>();
+  const requiredTypes = [DocumentType.FICHE_INITIALE, DocumentType.RAPPORT_DPE];
+
+  for (const type of requiredTypes) {
+    const candidates = docs
+      .filter((d) => d.docType === type)
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+    if (candidates[0]) byType.set(type, candidates[0]);
+  }
+
+  return requiredTypes.map((type) => byType.get(type)).filter(Boolean) as Array<(typeof docs)[number]>;
 }
 
 function baseCaseIncludes() {

@@ -1,0 +1,1060 @@
+"""
+Project: mini_soulsketch
+File: pdf_generator/pages_builders/build_cover_page.py
+Author: ItayVazana
+Date: 10/05/2025
+
+Description:
+Creates a styled cover page for the emotional analysis PDF using reportlab.
+"""
+
+import sys
+from pathlib import Path
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+import random
+import string
+from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+
+# Constants
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+SAFE_MARGIN = 10
+SECTION_SPACING = 25
+TIGHTER_SPACING = 15  # Reduced spacing between title and drawing preview
+
+
+def generate_random_id(length=6):
+    """Generate a random alphanumeric ID of given length."""
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
+
+def build_cover_page(output_path: str, logo_path: str, banner_path: str, drawing_img_path: str):
+    """
+    Generates a cover page PDF with a title, date, drawing ID, images, and logos.
+
+    :param output_path: Where to save the generated PDF.
+    :param logo_path: Path to the SoulSketch logo image.
+    :param banner_path: Path to the full-width graphic banner image.
+    :param drawing_img_path: Path to the drawing preview image.
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    # Draw banner and footer
+    banner_img = ImageReader(banner_path)
+    c.drawImage(banner_img, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+    c.drawImage(banner_img, 0, 0, width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    # Define usable content area
+    content_top = height - BANNER_HEIGHT - SAFE_MARGIN
+    content_bottom = FOOTER_HEIGHT + SAFE_MARGIN
+    content_height = content_top - content_bottom - (2 * SECTION_SPACING + TIGHTER_SPACING)
+    section_height = content_height / 4
+
+    # Section 1: Logo (centered)
+    logo = ImageReader(logo_path)
+    logo_size = 150
+    logo_y = content_top - logo_size
+    c.drawImage(
+        logo,
+        (width - logo_size) / 2,
+        logo_y,
+        width=logo_size,
+        height=logo_size,
+        mask='auto'
+    )
+
+    # Section 2: Title + ID + Date
+    sec2_top = logo_y - SECTION_SPACING
+    c.setFont("Helvetica-Bold", 26)
+    c.setFillColor(colors.HexColor("#333333"))
+    c.drawCentredString(width / 2, sec2_top - 40, "Emotional Analysis Report")
+
+    drawing_id = f"Drawing_{generate_random_id()}"
+    current_date = datetime.now().strftime("%d/%m/%Y")
+
+    c.setFont("Helvetica", 14)
+    c.setFillColor(colors.HexColor("#555555"))
+    c.drawCentredString(width / 2, sec2_top - 65, f"ID: {drawing_id}")
+    c.drawCentredString(width / 2, sec2_top - 85, f"Date: {current_date}")
+
+    # Section 3: Drawing preview (centered, 4:3 ratio)
+    sec3_top = sec2_top - section_height - TIGHTER_SPACING
+    drawing_img = ImageReader(drawing_img_path)
+    preview_width = width * 0.6
+    preview_height = preview_width * 0.75  # 4:3 ratio
+    preview_y = sec3_top - preview_height
+    c.drawImage(
+        drawing_img,
+        (width - preview_width) / 2,
+        preview_y,
+        width=preview_width,
+        height=preview_height,
+        mask='auto'
+    )
+
+    # Section 4: Footer text (moved above footer)
+    c.setFont("Helvetica-Oblique", 10)
+    c.setFillColor(colors.grey)
+    c.showPage()
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_faces_pages.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Generates the full Facial Expressions section in the final PDF report.
+
+Includes:
+1. Intro page with title
+2. Detection overview page with up to 3 overview images
+3. Per-expression pages using build_single_expression_page()
+
+All pages use a consistent header/footer with fallback image support.
+"""
+
+import sys
+from pathlib import Path
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+from pages_builders.single_expression_page_builder import build_single_expression_page
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+FALLBACK_IMG = str(PROJECT_ROOT / "assets" / "image_placeholder.png")
+
+
+def safe_draw_image(c, path, x, y, width, height):
+    """
+    Attempts to draw an image from path. If path is invalid, draws a fallback image.
+    For headers/footers, disables aspect ratio preservation to ensure full-width stretch.
+    """
+    final_path = path if path and Path(path).exists() else FALLBACK_IMG
+    preserve = not any(key in str(final_path).lower() for key in ["banner", "footer"])
+    try:
+        c.drawImage(ImageReader(final_path), x, y, width=width, height=height, preserveAspectRatio=preserve, mask='auto')
+    except Exception as e:
+        print(f"[DRAW ERROR] Failed to draw image from {final_path}: {e}")
+
+
+def build_faces_pages(output_path: str,
+                      header_img_path: str,
+                      footer_img_path: str,
+                      expressions: list[dict],
+                      detection_img_paths: list[str]):
+    """
+    Generates the Facial Expressions section with intro + detection overview + per-expression pages.
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    # === Intro Page ===
+    safe_draw_image(c, header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT)
+    c.setFont("Helvetica-Bold", 32)
+    c.setFillColor(colors.HexColor("#111111"))
+    c.drawCentredString(width / 2, height / 2, "Facial Expressions Analysis")
+    safe_draw_image(c, footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT)
+    c.showPage()
+
+    # === Detection Overview Page ===
+    safe_draw_image(c, header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT)
+    content_top = height - BANNER_HEIGHT
+    content_bottom = FOOTER_HEIGHT
+    section_height = (content_top - content_bottom) / 3
+
+    for i, img_path in enumerate(detection_img_paths[:3]):
+        y = content_bottom + (2 - i) * section_height
+        if i == 0:
+            safe_draw_image(c, img_path, width / 2 - 150, y + 10,
+                            width=300, height=section_height - 20)
+        else:
+            safe_draw_image(c, img_path, 0, y, width=width, height=section_height)
+
+    safe_draw_image(c, footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT)
+    c.showPage()
+
+    # === Per-Expression Pages ===
+    print("========== EXPRESSION ID COMPARISON ==========\n")
+    for i, exp in enumerate(expressions, start=1):
+        print(f"[BUILD] Expression {exp['id']} — Crop: {exp.get('crop_path')}, Plot: {exp.get('plot_path')}")
+        if not exp.get('crop_path'):
+            print(f"[WARNING] Missing crop for {exp['id']}")
+        if not exp.get('plot_path'):
+            print(f"[WARNING] Missing plot for {exp['id']}")
+
+        build_single_expression_page(
+            c,
+            expression_name=exp["id"],
+            index=i,
+            expression_type=exp.get("expression", "Unknown"),
+            description_lines=exp.get("description", []),
+            crop_path=exp.get("crop_path"),
+            plot_path=exp.get("plot_path"),
+            header_img_path=header_img_path,
+            footer_img_path=footer_img_path
+        )
+
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_final_thankyou_page.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Generates the final "Thank You" page in the PDF report.
+Includes a farewell message, logo, project description, and credits.
+All content is styled and centered using ReportLab.
+"""
+
+import sys
+from pathlib import Path
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+
+THANK_YOU_TEXT = """
+Thank you for exploring the world of emotions with Etma'en – the Emotional Drawing Analyzer.
+We’re proud to help unveil the feelings behind every brushstroke, every line, every color.
+Your curiosity fuels the bridge between creativity and insight – and we’re honored to walk that path with you.
+"""
+
+PROJECT_DESCRIPTION = """
+SoulSketch began as a bold academic challenge — a final project for the
+"Algorithms in Machine Learning and Multimedia in Python" course — and evolved into a meaningful journey.
+Powered by deep learning, it transforms children's drawings into emotional narratives,
+combining object recognition, facial expression decoding, and rich color-emotion analysis.
+More than code, this project is our heartfelt attempt to connect psychology and AI, art and algorithm.
+"""
+
+CREDITS_LINE = "Created with ♥ by Itay Vazana & Oriya Even Chen"
+
+
+def build_final_thankyou_page(output_path: str,
+                               header_img_path: str,
+                               footer_img_path: str,
+                               logo_path: str):
+    """
+    Generates a final thank-you and project info page with centered layout.
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    # Header and footer
+    c.drawImage(header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+    c.drawImage(footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    # Divide content area
+    content_top = height - BANNER_HEIGHT
+    content_bottom = FOOTER_HEIGHT
+    section_height = (content_top - content_bottom) / 3
+
+    center_x = width / 2
+
+    # Section 1: Thank you text (centered)
+    c.setFont("Helvetica", 11)
+    y = content_bottom + 2 * section_height + section_height / 2 + 30
+    for line in THANK_YOU_TEXT.strip().split("\n"):
+        parts = line.split("SoulSketch")
+        text_obj = c.beginText()
+        text_obj.setTextOrigin(center_x, y)
+        text_obj.setFont("Helvetica", 11)
+        if len(parts) == 1:
+            text_obj.setTextOrigin(center_x - c.stringWidth(line) / 2, y)
+            text_obj.textLine(line)
+        else:
+            offset_x = center_x - c.stringWidth(line) / 2
+            text_obj.setTextOrigin(offset_x, y)
+            for i, part in enumerate(parts):
+                text_obj.setFont("Helvetica", 11)
+                text_obj.textOut(part)
+                if i != len(parts) - 1:
+                    text_obj.setFont("Helvetica-Bold", 11)
+                    text_obj.textOut("SoulSketch")
+        c.drawText(text_obj)
+        y -= 14
+
+    # Section 2: Logo
+    c.drawImage(logo_path, center_x - 150, content_bottom + section_height + (section_height - 300) / 2 + 20,
+                width=300, height=300, mask='auto')
+
+    # Section 3: Description + credits
+    y = content_bottom + section_height - 40
+    for line in PROJECT_DESCRIPTION.strip().split("\n"):
+        parts = line.split("SoulSketch")
+        full_line = line.strip()
+        total_width = c.stringWidth(full_line, "Helvetica", 10)
+        offset_x = center_x - total_width / 2
+
+        text_obj = c.beginText()
+        text_obj.setFont("Helvetica", 10)
+        text_obj.setTextOrigin(offset_x, y)
+
+        for i, part in enumerate(parts):
+            text_obj.setFont("Helvetica", 10)
+            text_obj.textOut(part)
+            if i != len(parts) - 1:
+                text_obj.setFont("Helvetica-Bold", 10)
+                text_obj.textOut("SoulSketch")
+
+        c.drawText(text_obj)
+        y -= 12
+
+    # Credits
+    y -= 25
+    c.setFont("Helvetica-Bold", 10)
+    c.setFillColor(colors.HexColor("#222222"))
+    c.drawCentredString(center_x, y, CREDITS_LINE)
+
+    c.showPage()
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_full_general_analysis.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Generates the full "General Analysis" section of the emotional PDF report.
+
+Includes:
+1. Page 1 – Drawing image + Emotion classification (EC) plot + EC text result + color summary
+2. Page 2 – Color Emotion Extraction (CEX) plot + Processed input image
+
+This is a core visual and interpretive part of the report.
+"""
+
+import sys
+from pathlib import Path
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+import re
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+SAFE_MARGIN = 10
+SECTION_SPACING = 15
+PLOT_WIDTH = 180
+PLOT_HEIGHT = 180
+MARGIN = 50
+
+
+def generate_color_summary(dominant_colors):
+    """
+    Generate a smart textual summary based on dominant drawing colors.
+    :param dominant_colors: List of dicts, each with 'color_name', 'emotion', and 'proportion'
+    :return: Text summary string
+    """
+    if not dominant_colors:
+        return ""
+
+    sorted_colors = sorted(dominant_colors, key=lambda x: -x.get("proportion", 0))
+    top_colors = sorted_colors[:3]
+    summary_parts = []
+
+    for entry in top_colors:
+        color = entry.get("color_name", "a color")
+        emotion = entry.get("emotion", "an emotion")
+        summary_parts.append(f"{color} ({emotion})")
+
+    if len(summary_parts) == 1:
+        return f"The drawing is visually dominated by {summary_parts[0]}."
+    elif len(summary_parts) == 2:
+        return f"The drawing features mostly {summary_parts[0]} and {summary_parts[1]}."
+    else:
+        return f"Visually, the drawing combines {summary_parts[0]}, {summary_parts[1]}, and {summary_parts[2]}."
+
+
+def build_general_analysis_page_1(c, width, height,
+                                   header_img_path, footer_img_path,
+                                   drawing_img_path, ec_plot_img_path,
+                                   ec_result, confidence, ec_description,
+                                   dominant_colors_summary=""):
+    """
+    Builds the first general analysis page with title, visuals, emotion result, and summary.
+    """
+    c.drawImage(ImageReader(header_img_path), 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+    c.drawImage(ImageReader(footer_img_path), 0, 0, width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    content_top = height - BANNER_HEIGHT
+    content_bottom = FOOTER_HEIGHT + SAFE_MARGIN
+    total_height = content_top - content_bottom - 3 * SECTION_SPACING
+    section_height = total_height / 4
+    center_x = width / 2
+    TITLE_MARGIN = 25
+
+    title_y = height - BANNER_HEIGHT - TITLE_MARGIN
+    c.setFont("Helvetica-Bold", 18)
+    c.setFillColor(colors.HexColor("#333333"))
+    c.drawCentredString(center_x, title_y, "General Analysis – Draw")
+
+    half_width = (width - 2 * SAFE_MARGIN - 5) / 2
+    visual_top = title_y - SECTION_SPACING
+    visual_height = section_height * 2 + 10
+    img_y = visual_top - visual_height
+
+    c.drawImage(ImageReader(drawing_img_path), SAFE_MARGIN, img_y,
+                width=half_width, height=visual_height, preserveAspectRatio=True, mask='auto')
+    c.setFont("Helvetica", 10)
+    c.setFillColor(colors.black)
+    c.drawCentredString(SAFE_MARGIN + half_width / 2, img_y - 12, "The original drawing")
+
+    c.drawImage(ImageReader(ec_plot_img_path), SAFE_MARGIN + half_width + 5, img_y,
+                width=half_width, height=visual_height, preserveAspectRatio=True, mask='auto')
+    c.drawCentredString(SAFE_MARGIN + 1.5 * half_width + 5, img_y - 12, "Emotion Distribution Plot")
+
+    base_y = content_bottom + section_height + SECTION_SPACING
+
+    c.setFont("Helvetica", 12)
+    c.setFillColor(colors.HexColor("#333333"))
+    c.drawString(SAFE_MARGIN, base_y + 65, "The dominant emotion in this drawing is:")
+
+    c.setFont("Helvetica-Bold", 22)
+    c.drawCentredString(center_x, base_y + 25, ec_result)
+
+    c.setFont("Helvetica", 11)
+    c.setFillColor(colors.HexColor("#888888"))
+    confidence_pct = int(confidence * 100)
+    c.drawCentredString(center_x, base_y - 10, f"Confidence – {confidence_pct}%")
+
+    c.setFillColor(colors.HexColor("#333333"))
+    c.setFont("Helvetica", 11)
+    ec_description = re.sub(r"\(\d\.\d+\)", "", ec_description)
+    words = ec_description.replace("**", " ** ").split()
+    to_bold = False
+    line = ''
+    for word in words:
+        if word == "**":
+            to_bold = not to_bold
+            continue
+        if to_bold:
+            line += f"<B>{word}</B> "
+        else:
+            line += word + " "
+    line = line.strip()
+
+    text_obj = c.beginText()
+    text_width = c.stringWidth(line.replace("<B>", "").replace("</B>", ""), "Helvetica", 11)
+    text_obj.setTextOrigin((width - text_width) / 2, base_y - 40)
+
+    to_bold = False
+    for word in line.split():
+        if word.startswith("<B>") and word.endswith("</B>"):
+            clean = word[3:-4]
+            text_obj.setFont("Helvetica-Bold", 11)
+            text_obj.textOut(clean + ' ')
+        else:
+            text_obj.setFont("Helvetica", 11)
+            text_obj.textOut(word + ' ')
+    c.drawText(text_obj)
+
+    dominant_colors_summary = re.sub(r"\(\d\.\d+\)", "", dominant_colors_summary)
+    dominant_colors_summary = re.sub(r"\s{2,}", " ", dominant_colors_summary).strip()
+
+    if dominant_colors_summary:
+        c.setFont("Helvetica-Bold", 11)
+        c.setFillColor(colors.HexColor("#333333"))
+        summary_width = c.stringWidth(dominant_colors_summary, "Helvetica-Bold", 11)
+        c.drawString((width - summary_width) / 2, base_y - 60, dominant_colors_summary)
+    else:
+        c.setFont("Helvetica", 11)
+        c.drawCentredString(center_x, base_y - 60, "(Color-based summary to be generated here.)")
+
+    c.showPage()
+
+
+def build_general_analysis_page_2(c, width, height,
+                                   header_img_path, footer_img_path,
+                                   cex_plot_img_path, processed_img_path):
+    """
+    Builds the second general analysis page with two horizontal sections:
+    - Top half: color emotion plot
+    - Bottom half: processed image
+    """
+    c.drawImage(ImageReader(header_img_path), 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+    c.drawImage(ImageReader(footer_img_path), 0, 0, width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    content_top = height - BANNER_HEIGHT
+    content_bottom = FOOTER_HEIGHT
+    content_height = content_top - content_bottom
+    half_height = content_height / 2
+
+    c.drawImage(
+        ImageReader(cex_plot_img_path),
+        0,
+        content_bottom + half_height,
+        width=width,
+        height=half_height,
+        preserveAspectRatio=True,
+        anchor='s',
+        mask='auto'
+    )
+
+    c.drawImage(
+        ImageReader(processed_img_path),
+        0,
+        content_bottom,
+        width=width,
+        height=half_height,
+        preserveAspectRatio=True,
+        anchor='s',
+        mask='auto'
+    )
+
+    c.showPage()
+
+
+def build_full_general_analysis(output_path: str,
+                                 header_img_path: str,
+                                 footer_img_path: str,
+                                 drawing_img_path: str,
+                                 processed_img_path: str,
+                                 ec_plot_img_path: str,
+                                 cex_plot_img_path: str,
+                                 file_name: str,
+                                 ec_result: str,
+                                 confidence: float,
+                                 ec_description: str,
+                                 dominant_drawing_colors: list = None):
+    """
+    Builds both general analysis pages into a single PDF.
+    Page 1: Drawing + EC plot + emotion result
+    Page 2: CEX plot + processed image (no text)
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    color_summary = generate_color_summary(dominant_drawing_colors or [])
+
+    build_general_analysis_page_1(c, width, height,
+                                  header_img_path, footer_img_path,
+                                  drawing_img_path, ec_plot_img_path,
+                                  ec_result, confidence, ec_description,
+                                  color_summary)
+
+    build_general_analysis_page_2(c, width, height,
+                                  header_img_path, footer_img_path,
+                                  cex_plot_img_path, processed_img_path)
+
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_object_pages.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Builds the Objects Analysis section of the final PDF report.
+
+Includes:
+1. Intro page with title
+2. Bounding box results page (2 vertical images)
+3. Object class + confidence plots (2x2 grid)
+4. Per-object analysis pages (1 per detected object)
+"""
+
+import sys
+from pathlib import Path
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from pages_builders.single_object_page_builder import build_single_object_page
+
+
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+PLOT_WIDTH = 230
+PLOT_HEIGHT = 180
+FALLBACK_IMG = str(PROJECT_ROOT / "assets" / "image_placeholder.png")
+
+
+def safe_draw_image(c, path, x, y, width, height):
+    """
+    Attempts to draw an image from path. If path is invalid, draws a fallback image.
+    For headers/footers, disables aspect ratio preservation to ensure full-width stretch.
+    """
+    final_path = path if path and Path(path).exists() else FALLBACK_IMG
+
+    # Disable aspect ratio preservation for header/footer to ensure full width
+    preserve = not any(key in str(final_path).lower() for key in ["banner", "footer"])
+
+    try:
+        c.drawImage(ImageReader(final_path), x, y, width=width, height=height, preserveAspectRatio=preserve, mask='auto')
+    except Exception as e:
+        print(f"[DRAW ERROR] Failed to draw image from {final_path}: {e}")
+
+
+def build_object_pages(output_path: str,
+                        header_img_path: str,
+                        footer_img_path: str,
+                        objects: list[dict],
+                        bbox_img_paths: list[str],
+                        class_conf_plot_paths: list[str],
+                        class_dist_plot_paths: list[str]):
+    """
+    Generates the Objects Analysis section with intro + context pages + per-object pages.
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    # Intro Page
+    safe_draw_image(c, header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT)
+    c.setFont("Helvetica-Bold", 32)
+    c.setFillColor(colors.HexColor("#111111"))
+    c.drawCentredString(width / 2, height / 2, "Objects Analysis")
+    safe_draw_image(c, footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT)
+    c.showPage()
+
+    # Bounding Box Page (2 images stacked vertically)
+    safe_draw_image(c, header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT)
+    content_height = height - BANNER_HEIGHT - FOOTER_HEIGHT
+    half_height = content_height / 2
+
+    for i, path in enumerate(bbox_img_paths[:2]):
+        y = FOOTER_HEIGHT + (1 - i) * half_height
+        safe_draw_image(c, path, 0, y, width=width, height=half_height)
+
+    safe_draw_image(c, footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT)
+    c.showPage()
+
+    # Class + Confidence Distribution Page (4 plots in 2x2 grid)
+    safe_draw_image(c, header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT)
+    c.setFont("Helvetica-Bold", 20)
+    c.setFillColor(colors.HexColor("#111111"))
+    title_y = height - BANNER_HEIGHT - 30
+    c.drawCentredString(width / 2, title_y, "Object class distribution and confidence")
+
+    available_height = height - BANNER_HEIGHT - FOOTER_HEIGHT - 60
+    top_y = FOOTER_HEIGHT + available_height / 2
+    mid_x = width / 2
+
+    coords = [
+        (0, top_y),
+        (mid_x, top_y),
+        (0, FOOTER_HEIGHT),
+        (mid_x, FOOTER_HEIGHT)
+    ]
+    plots = class_conf_plot_paths + class_dist_plot_paths
+    for path, (x, y) in zip(plots, coords):
+        safe_draw_image(c, path, x, y, width=width / 2, height=available_height / 2)
+
+    safe_draw_image(c, footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT)
+    c.showPage()
+
+    # Object Pages
+    print("\n========== OBJECT ID COMPARISON ==========\n")
+    for i, obj in enumerate(objects, start=1):
+        print(f"Object ID: {obj['id']}")
+        print(f"Expected crop key: OBJDET_crop_{obj['id']}")
+        print(f"Expected plot key: CEX_object_{obj['id']}")
+        print(f"Actual crop path: {obj.get('crop_path')}")
+        print(f"Actual plot path: {obj.get('plot_path')}\n")
+
+        build_single_object_page(
+            c,
+            object_name=obj["id"],
+            index=i,
+            object_type=obj.get("type", "Unknown"),
+            description_lines=obj.get("description", []),
+            crop_path=obj.get("crop_path"),
+            plot_path=obj.get("plot_path"),
+            header_img_path=header_img_path,
+            footer_img_path=footer_img_path
+        )
+
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_table_of_contents.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Creates a styled Table of Contents page for the emotional analysis PDF.
+
+Includes:
+- Visual header and footer
+- Centered title
+- Dynamic TOC entries list with aligned page numbers
+"""
+
+import sys
+from pathlib import Path
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# === Layout Constants ===
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+SAFE_MARGIN = 10
+SECTION_SPACING = 25
+
+
+def build_table_of_contents(output_path: str,
+                            entries: list[tuple[str, int]],
+                            header_img_path: str,
+                            footer_img_path: str):
+    """
+    Generates a Table of Contents page for the PDF with visual header and footer.
+
+    Args:
+        output_path (str): Path to save the generated TOC page.
+        entries (list[tuple[str, int]]): List of TOC entries as (section title, page number).
+        header_img_path (str): Path to header image.
+        footer_img_path (str): Path to footer image.
+    """
+    c = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+
+    # === Draw Header & Footer ===
+    c.drawImage(ImageReader(header_img_path), 0, height - BANNER_HEIGHT,
+                width=width, height=BANNER_HEIGHT, mask='auto')
+    c.drawImage(ImageReader(footer_img_path), 0, 0,
+                width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    # === Define Usable Content Area ===
+    content_top = height - BANNER_HEIGHT - SAFE_MARGIN
+    content_bottom = FOOTER_HEIGHT + SAFE_MARGIN
+    full_height = content_top - content_bottom
+    quarter_height = full_height / 4
+
+    usable_top = content_top - quarter_height
+    usable_bottom = content_bottom + quarter_height
+
+    # === Title ===
+    c.setFont("Helvetica-Bold", 24)
+    c.setFillColor(colors.HexColor("#333333"))
+    c.drawCentredString(width / 2, usable_top + quarter_height / 2, "Table of Contents")
+
+    # === TOC Entries ===
+    c.setFont("Helvetica", 13)
+    c.setFillColor(colors.black)
+    line_height = 24
+    start_y = usable_top - 20
+
+    for idx, (title, page_num) in enumerate(entries):
+        text = f"{title} ............................................. {page_num}"
+        c.drawString(100, start_y - idx * line_height, text)
+
+    c.showPage()
+    c.save()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/single_expression_page_builder.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Generates a single facial expression analysis page in the PDF.
+
+The page includes:
+- Title with expression name and type
+- Top half: cropped face image
+- Bottom half: emotion distribution plot
+- Header and footer graphics
+"""
+
+import sys
+from pathlib import Path
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# === Layout Constants ===
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+MARGIN = 50
+
+
+def build_single_expression_page(c: Canvas,
+                                  expression_name: str,
+                                  index: int,
+                                  expression_type: str,
+                                  description_lines: list,
+                                  crop_path: str,
+                                  plot_path: str,
+                                  header_img_path: str = "assets/banner.png",
+                                  footer_img_path: str = "assets/footer.png"):
+    """
+    Draws a single facial expression analysis page on an existing ReportLab canvas.
+
+    Args:
+        c (Canvas): ReportLab canvas object to draw on.
+        expression_name (str): Identifier for the expression (e.g., "happy_face_1").
+        index (int): Index number (for debugging or logging).
+        expression_type (str): Expression label (e.g., "angry_face").
+        description_lines (list): List of strings describing the expression.
+        crop_path (str): Path to the cropped facial expression image.
+        plot_path (str): Path to the emotion classification plot image.
+        header_img_path (str): Path to the header image.
+        footer_img_path (str): Path to the footer image.
+    """
+    width, height = A4
+
+    # Header
+    c.drawImage(header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+
+    # Title line
+    c.setFont("Helvetica-Bold", 14)
+    c.setFillColor(colors.HexColor("#222222"))
+    c.drawString(MARGIN, height - BANNER_HEIGHT - 20, f"{expression_name}    type: {expression_type}")
+
+    # Layout bounds
+    available_height = height - BANNER_HEIGHT - FOOTER_HEIGHT - 80
+    half_height = available_height / 2
+
+    # === Crop image (top section) ===
+    crop_success = False
+    if crop_path:
+        try:
+            norm_crop = Path(crop_path).resolve().as_posix()
+            c.drawImage(ImageReader(norm_crop), MARGIN, FOOTER_HEIGHT + half_height + 40,
+                        width=width - 2 * MARGIN, height=half_height - 40,
+                        preserveAspectRatio=True, mask='auto')
+            c.setFont("Helvetica", 10)
+            c.drawCentredString(width / 2, FOOTER_HEIGHT + half_height + 25, "Character Crop")
+            crop_success = True
+        except Exception as e:
+            print(f"[ERROR] Failed to draw crop image for {expression_name}: {e}")
+    if not crop_success:
+        print(f"[WARNING] Missing crop image for {expression_name}")
+
+    # === Plot image (bottom section) ===
+    plot_success = False
+    if plot_path:
+        try:
+            norm_plot = Path(plot_path).resolve().as_posix()
+            plot_bottom = FOOTER_HEIGHT + 30
+            plot_top = FOOTER_HEIGHT + half_height + 10
+            plot_height = plot_top - plot_bottom
+            plot_width = width - 2 * MARGIN
+
+            c.drawImage(ImageReader(norm_plot), MARGIN, plot_bottom,
+                        width=plot_width, height=plot_height,
+                        preserveAspectRatio=True, mask='auto')
+            c.setFont("Helvetica", 10)
+            c.drawCentredString(width / 2, plot_bottom - 12, "Emotion Plot")
+            plot_success = True
+        except Exception as e:
+            print(f"[ERROR] Failed to draw plot image for {expression_name}: {e}")
+    if not plot_success:
+        print(f"[WARNING] Missing plot image for {expression_name}")
+
+    c.showPage()
+
+"""
+Project: SoulSketch
+File: pdf_generator/pages_builders/build_single_object_page.py
+Authors: Itay Vazana & Oriya Even Chen
+
+Description:
+Generates a single object analysis page for the final PDF report.
+
+Includes:
+- Object crop image (top)
+- Descriptive text with bold highlights (centered)
+- Emotion color plot (bottom)
+- Full visual layout with header/footer
+"""
+
+import sys
+from pathlib import Path
+
+# === Auto-injected project root resolver ===
+PROJECT_ROOT = Path(__file__).resolve().parent
+while PROJECT_ROOT.name not in ["SoulSketch", "model"]:
+    if PROJECT_ROOT.parent == PROJECT_ROOT:
+        break
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+import re
+
+BANNER_HEIGHT = 80
+FOOTER_HEIGHT = 80
+CROP_SIZE = 180
+MARGIN = 50
+
+
+def build_single_object_page(c: Canvas,
+                              object_name: str,
+                              index: int,
+                              object_type: str,
+                              description_lines: list,
+                              crop_path: str,
+                              plot_path: str,
+                              header_img_path: str = "assets/banner.png",
+                              footer_img_path: str = "assets/footer.png"):
+    """
+    Draws a single object analysis page on an existing ReportLab canvas.
+    """
+    width, height = A4
+
+    # Header
+    c.drawImage(header_img_path, 0, height - BANNER_HEIGHT, width=width, height=BANNER_HEIGHT, mask='auto')
+
+    # Title
+    c.setFont("Helvetica-Bold", 14)
+    c.setFillColor(colors.HexColor("#222222"))
+    c.drawString(MARGIN, height - BANNER_HEIGHT - 20, f"{object_name}    type: {object_type}")
+
+    # Crop Image (top center)
+    crop_top_y = height - BANNER_HEIGHT - 60
+    if crop_path:
+        try:
+            norm_crop = Path(crop_path).resolve().as_posix()
+            c.drawImage(ImageReader(norm_crop), width / 2 - CROP_SIZE / 2, crop_top_y - CROP_SIZE,
+                        width=CROP_SIZE, height=CROP_SIZE, preserveAspectRatio=True, anchor='n', mask='auto')
+            c.setFont("Helvetica", 10)
+            c.drawCentredString(width / 2, crop_top_y - CROP_SIZE - 10, "Object Crop")
+        except Exception as e:
+            print(f"[ERROR] Failed to load crop image for {object_name}: {crop_path} – {e}")
+    else:
+        print(f"[WARNING] No crop image path for {object_name}")
+
+    # Text block (under crop, centered + underline for bold, fix spacing)
+    text_y_start = crop_top_y - CROP_SIZE - 70
+    line_height = 18
+    for line in description_lines:
+        segments = re.split(r'(\*\*[^*]+\*\*)', line)
+        processed_segments = []
+        for segment in segments:
+            if not segment:
+                continue
+            is_bold = segment.startswith("**") and segment.endswith("**")
+            clean = segment[2:-2] if is_bold else segment
+            clean = clean.strip()
+            if clean:
+                processed_segments.append((clean, is_bold))
+
+        total_width = sum(c.stringWidth(text + " ", "Helvetica", 11) for text, _ in processed_segments)
+        x = (width - total_width) / 2
+        y = text_y_start
+
+        for text, is_bold in processed_segments:
+            c.setFont("Helvetica", 11)
+            c.drawString(x, y, text)
+            if is_bold:
+                c.setLineWidth(0.5)
+                c.line(x, y - 2, x + c.stringWidth(text, "Helvetica", 11), y - 2)
+            x += c.stringWidth(text + " ", "Helvetica", 11)
+
+        text_y_start -= line_height
+
+    # Emotion Plot (bottom)
+    if plot_path:
+        try:
+            norm_plot = Path(plot_path).resolve().as_posix()
+            plot_bottom = FOOTER_HEIGHT + 30
+            plot_top = max(plot_bottom + 160, text_y_start - 20)
+            plot_height = plot_top - plot_bottom
+            plot_width = width - 2 * MARGIN
+
+            c.drawImage(ImageReader(norm_plot), MARGIN, plot_bottom,
+                        width=plot_width, height=plot_height,
+                        preserveAspectRatio=True, mask='auto')
+            c.setFont("Helvetica", 10)
+            c.drawCentredString(width / 2, plot_bottom - 12, "Emotion Plot")
+        except Exception as e:
+            print(f"[ERROR] Failed to load plot image for {object_name}: {plot_path} – {e}")
+
+    # Footer
+    c.drawImage(footer_img_path, 0, 0, width=width, height=FOOTER_HEIGHT, mask='auto')
+
+    c.showPage()
+

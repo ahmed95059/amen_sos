@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pre Analysis Format",
+  "type": "object",
+
+  "definitions": {
+    "emotionColor": {
+      "type": "object",
+      "properties": {
+        "color_name": { "type": "string" },
+        "rgb": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "emotion": { "type": "string" },
+        "is_unusual": { "type": "boolean" }
+      },
+      "required": ["color_name", "rgb", "emotion"]
+    }
+  },
+
+  "properties": {
+    "general_emotion": { "type": "string" },
+    "general_emotion_confidence": { "type": "number" },
+    "drawing_image_path": { "type": "string" },
+    "drawing_bw_image_path": { "type": "string" },
+
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "position": { "type": "string" },
+          "size": { "type": "string" },
+          "dominant_expression": { "type": ["string", "null"] },
+          "dominant_emotion_hint": { "type": ["string", "null"] },
+          "dominant_emotion_color": { "type": ["string", "null"] },
+          "is_color_unusual": { "type": "boolean" },
+          "colors": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/emotionColor" }
+          },
+          "crop_path": { "type": ["string", "null"] },
+          "confidence": { "type": ["number", "null"] }
+        },
+        "required": ["id", "type", "position", "size"]
+      }
+    },
+
+    "facial_expressions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "expression": { "type": "string" },
+          "mapped_emotion": { "type": ["string", "null"] },
+          "dominant_emotion_color": { "type": ["string", "null"] },
+          "colors": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/emotionColor" }
+          },
+          "crop_path": { "type": ["string", "null"] },
+          "confidence": { "type": ["number", "null"] }
+        },
+        "required": ["id", "expression"]
+      }
+    },
+
+    "dominant_drawing_colors": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/emotionColor" }
+    }
+  },
+
+  "required": [
+    "general_emotion",
+    "general_emotion_confidence",
+    "drawing_image_path",
+    "drawing_bw_image_path",
+    "objects",
+    "facial_expressions",
+    "dominant_drawing_colors"
+  ]
+}

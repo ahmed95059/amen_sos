@@ -1,0 +1,252 @@
+{
+    "pre_analysis": {
+        "general_emotion": "Fear",
+        "general_emotion_confidence": 0.514,
+        "drawing_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input.png",
+        "drawing_bw_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input_BW.png",
+        "objects": [
+            {
+                "id": "3323_house",
+                "type": "house",
+                "position": "top-left",
+                "size": "medium",
+                "dominant_expression": null,
+                "dominant_emotion_hint": null,
+                "dominant_emotion_color": "Happiness",
+                "is_color_unusual": false,
+                "colors": [
+                    {
+                        "color_name": "pink",
+                        "rgb": [
+                            233,
+                            188,
+                            212
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 712,
+                        "is_unusual": false
+                    },
+                    {
+                        "color_name": "brown",
+                        "rgb": [
+                            185,
+                            55,
+                            63
+                        ],
+                        "emotion": "Calm",
+                        "proportion": 428,
+                        "is_unusual": false
+                    },
+                    {
+                        "color_name": "pink",
+                        "rgb": [
+                            225,
+                            137,
+                            169
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 759,
+                        "is_unusual": false
+                    }
+                ],
+                "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/3323_house.png",
+                "confidence": 0.772
+            },
+            {
+                "id": "9107_tree",
+                "type": "tree",
+                "position": "bottom-center",
+                "size": "medium",
+                "dominant_expression": null,
+                "dominant_emotion_hint": null,
+                "dominant_emotion_color": "Happiness",
+                "is_color_unusual": false,
+                "colors": [
+                    {
+                        "color_name": "yellow",
+                        "rgb": [
+                            240,
+                            240,
+                            27
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 590,
+                        "is_unusual": false
+                    },
+                    {
+                        "color_name": "pink",
+                        "rgb": [
+                            183,
+                            194,
+                            192
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 678,
+                        "is_unusual": true
+                    },
+                    {
+                        "color_name": "gray",
+                        "rgb": [
+                            115,
+                            153,
+                            117
+                        ],
+                        "emotion": "Sadness",
+                        "proportion": 155,
+                        "is_unusual": false
+                    }
+                ],
+                "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/9107_tree.png",
+                "confidence": 0.604
+            },
+            {
+                "id": "9580_house",
+                "type": "house",
+                "position": "top-left",
+                "size": "medium",
+                "dominant_expression": null,
+                "dominant_emotion_hint": null,
+                "dominant_emotion_color": "Happiness",
+                "is_color_unusual": false,
+                "colors": [
+                    {
+                        "color_name": "pink",
+                        "rgb": [
+                            235,
+                            183,
+                            211
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 676,
+                        "is_unusual": false
+                    },
+                    {
+                        "color_name": "pink",
+                        "rgb": [
+                            217,
+                            132,
+                            169
+                        ],
+                        "emotion": "Happiness",
+                        "proportion": 731,
+                        "is_unusual": false
+                    }
+                ],
+                "crop_path": "shared_memory/2_OBJ_DET_out/objects/colored/crops/9580_house.png",
+                "confidence": 0.7
+            }
+        ],
+        "facial_expressions": [
+            {
+                "id": "expr_845238c5",
+                "expression": "happy_face",
+                "mapped_emotion": "Happiness",
+                "dominant_emotion_color": null,
+                "colors": [],
+                "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_845238c5.png",
+                "confidence": 0.868
+            },
+            {
+                "id": "expr_dcf8e52b",
+                "expression": "happy_face",
+                "mapped_emotion": "Happiness",
+                "dominant_emotion_color": null,
+                "colors": [],
+                "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_dcf8e52b.png",
+                "confidence": 0.826
+            },
+            {
+                "id": "expr_e0898cb7",
+                "expression": "happy_face",
+                "mapped_emotion": "Happiness",
+                "dominant_emotion_color": null,
+                "colors": [],
+                "crop_path": "shared_memory/3_FED_out/facial_expressions/crops/expr_e0898cb7.png",
+                "confidence": 0.63
+            }
+        ],
+        "dominant_drawing_colors": [
+            {
+                "color_name": "pink",
+                "rgb": [
+                    187,
+                    195,
+                    195
+                ],
+                "emotion": "Happiness",
+                "proportion": 6363
+            },
+            {
+                "color_name": "green",
+                "rgb": [
+                    40,
+                    106,
+                    74
+                ],
+                "emotion": "Calm",
+                "proportion": 2761
+            },
+            {
+                "color_name": "yellow",
+                "rgb": [
+                    226,
+                    224,
+                    67
+                ],
+                "emotion": "Happiness",
+                "proportion": 3040
+            },
+            {
+                "color_name": "gray",
+                "rgb": [
+                    95,
+                    159,
+                    165
+                ],
+                "emotion": "Sadness",
+                "proportion": 5460
+            }
+        ]
+    },
+    "analysis_text": {
+        "scene_descriptions": [
+            "The overall mood is quite **fear** (0.514).",
+            "With a lot of **pink**, the mood becomes **comforting**.",
+            "**green** in the background hints at a **intuitively drawn** feeling.",
+            "This **yellow** color brings out something **energetic**.",
+            "The choice of **gray** likely connects to a **neutral** tone."
+        ],
+        "object_descriptions": {
+            "3323_house": [
+                "Symbolically, the house reflects ideas of **stability**.",
+                "This coloring feels deeply **comforting**.",
+                "This medium-sized house gives a **ordinary** presence.",
+                "A house drawn at the top-left projects **dominant and past-oriented** and **detached**."
+            ],
+            "9107_tree": [
+                "This tree suggests rootedness and **nature**.",
+                "Its coloring feels **energetic** and organic.",
+                "This natural scale feels **balanced**.",
+                "In the bottom center, it roots the scene with a **symbolic and grounded** sense."
+            ],
+            "9580_house": [
+                "The house may symbolize **memory**.",
+                "This coloring feels deeply **warm**.",
+                "This medium-sized house gives a **settled** presence.",
+                "A house drawn at the top-left projects **dominant and past-oriented** and **idealized**."
+            ]
+        },
+        "expression_descriptions": {
+            "expr_845238c5": [
+                "This smile radiates something **elated**."
+            ],
+            "expr_dcf8e52b": [
+                "A happy expression shines with a **smiling** feeling."
+            ],
+            "expr_e0898cb7": [
+                "A happy expression shines with a **content** feeling."
+            ]
+        },
+        "full_paragraph": "Main Emotion: fear The overall mood is quite fear (0.514).\nWith a lot of pink, the mood becomes comforting.\ngreen in the background hints at a intuitively drawn feeling.\nThis yellow color brings out something energetic.\nThe choice of gray likely connects to a neutral tone.\nSymbolically, the house reflects ideas of stability. This coloring feels deeply comforting.\nThis medium-sized house gives a ordinary presence.\nA house drawn at the top-left projects dominant and past-oriented and detached.\nThis tree suggests rootedness and nature. Its coloring feels energetic and organic.\nThis natural scale feels balanced.\nIn the bottom center, it roots the scene with a symbolic and grounded sense.\nThe house may symbolize memory. This coloring feels deeply warm.\nThis medium-sized house gives a settled presence.\nA house drawn at the top-left projects dominant and past-oriented and idealized.\nThis smile radiates something elated. A happy expression shines with a smiling feeling.\nA happy expression shines with a content feeling."
+    }
+}

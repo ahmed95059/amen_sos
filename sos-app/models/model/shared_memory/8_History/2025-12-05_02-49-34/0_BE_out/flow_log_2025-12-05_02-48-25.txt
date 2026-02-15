@@ -1,0 +1,61 @@
+==================================================
+🚀 Full Analysis Flow Log
+🕒 Started at: 2025-12-05_02-48-25
+==================================================
+
+===========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py
+===========================================================================================================================================================
+[INFO] Loading YOLO model...
+Traceback (most recent call last):
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py", line 111, in <module>
+    model = YOLO(MODEL_PATH)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\models\yolo\model.py", line 54, in __init__
+    super().__init__(model=model, task=task, verbose=verbose)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\engine\model.py", line 147, in __init__
+    self._load(model, task=task)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\engine\model.py", line 289, in _load
+    self.model, self.ckpt = attempt_load_one_weight(weights)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\nn\tasks.py", line 1306, in attempt_load_one_weight
+    ckpt, weight = torch_safe_load(weight)  # load ckpt
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\nn\tasks.py", line 1211, in torch_safe_load
+    ckpt = torch.load(file, map_location="cpu")
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\ultralytics\utils\patches.py", line 115, in torch_load
+    return _torch_load(*args, **kwargs)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\serialization.py", line 1026, in load
+    return _load(opened_zipfile,
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\serialization.py", line 1438, in _load
+    result = unpickler.load()
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\serialization.py", line 1431, in find_class
+    return super().find_class(mod_name, name)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torchvision\__init__.py", line 6, in <module>
+    from torchvision import _meta_registrations, datasets, io, models, ops, transforms, utils
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torchvision\models\__init__.py", line 2, in <module>
+    from .convnext import *
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torchvision\models\convnext.py", line 8, in <module>
+    from ..ops.misc import Conv2dNormActivation, Permute
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torchvision\ops\__init__.py", line 1, in <module>
+    from ._register_onnx_ops import _register_custom_op
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torchvision\ops\_register_onnx_ops.py", line 5, in <module>
+    from torch.onnx import symbolic_opset11 as opset11
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\onnx\__init__.py", line 46, in <module>
+    from ._internal.exporter import (  # usort:skip. needs to be last to avoid circular import
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\onnx\_internal\exporter.py", line 44, in <module>
+    from torch.onnx._internal.fx import (
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\onnx\_internal\fx\__init__.py", line 1, in <module>
+    from .patcher import ONNXTorchPatcher
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\torch\onnx\_internal\fx\patcher.py", line 11, in <module>
+    import transformers  # type: ignore[import]
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\transformers\__init__.py", line 958, in <module>
+    import_structure = define_import_structure(Path(__file__).parent / "models", prefix="models")
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\transformers\utils\import_utils.py", line 2867, in define_import_structure
+    import_structure = create_import_structure_from_path(module_path)
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\transformers\utils\import_utils.py", line 2580, in create_import_structure_from_path
+    import_structure[f] = create_import_structure_from_path(os.path.join(module_path, f))
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\.venv\lib\site-packages\transformers\utils\import_utils.py", line 2604, in create_import_structure_from_path
+    with open(os.path.join(directory, module_name), encoding="utf-8") as f:
+  File "C:\Users\MSI\AppData\Local\Programs\Python\Python310\lib\codecs.py", line 309, in __init__
+    def __init__(self, errors='strict'):
+KeyboardInterrupt
+^C[EXIT CODE] 3221225786
+❌ Error in run_yolo_EMCLS

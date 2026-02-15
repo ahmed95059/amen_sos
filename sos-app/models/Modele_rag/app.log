@@ -1,0 +1,36 @@
+2025-10-31 21:02:35,417 - INFO - 🚀 Démarrage du serveur Flask...
+2025-10-31 21:02:35,431 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.1.109:8000
+2025-10-31 21:02:35,431 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-31 21:02:35,436 - INFO -  * Restarting with watchdog (windowsapi)
+2025-10-31 21:02:36,242 - INFO - 🚀 Démarrage du serveur Flask...
+2025-10-31 21:02:36,248 - WARNING -  * Debugger is active!
+2025-10-31 21:02:36,251 - INFO -  * Debugger PIN: 441-521-076
+2025-10-31 21:02:50,733 - INFO - 🟢 Requête reçue sur /chat
+2025-10-31 21:02:50,735 - INFO - 🧠 Message utilisateur : Bonjour
+2025-10-31 21:02:50,735 - INFO - 📦 Chargement de la base vectorielle FAISS...
+2025-10-31 21:02:51,449 - INFO -  * Detected change in 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\\Lib\\tarfile.py', reloading
+2025-10-31 21:02:51,459 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\cuda\\__init__.py', reloading
+2025-10-31 21:02:51,460 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\__init__.py', reloading
+2025-10-31 21:02:51,555 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\nn\\functional.py', reloading
+2025-10-31 21:02:51,602 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\nn\\modules\\rnn.py', reloading
+2025-10-31 21:02:51,626 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\functional.py', reloading
+2025-10-31 21:02:51,718 - INFO -  * Detected change in 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\\Lib\\gzip.py', reloading
+2025-10-31 21:02:51,787 - INFO -  * Detected change in 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\\Lib\\argparse.py', reloading
+2025-10-31 21:02:51,838 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\library.py', reloading
+2025-10-31 21:02:51,839 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\export\\custom_ops.py', reloading
+2025-10-31 21:02:51,913 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\_prims\\__init__.py', reloading
+2025-10-31 21:02:51,914 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\_library\\custom_ops.py', reloading
+2025-10-31 21:02:52,039 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\_library\\fake_impl.py', reloading
+2025-10-31 21:02:52,201 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\_prims\\debug_prims.py', reloading
+2025-10-31 21:02:52,247 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\fx\\experimental\\_config.py', reloading
+2025-10-31 21:02:52,266 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\_meta_registrations.py', reloading
+2025-10-31 21:02:52,308 - INFO -  * Detected change in 'C:\\Users\\salma\\Downloads\\chatbot_medical - Copie\\.venv\\Lib\\site-packages\\torch\\compiler\\config.py', reloading
+2025-10-31 21:02:52,324 - INFO -  * Detected change in 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\\Lib\\configparser.py', reloading
+2025-10-31 21:02:52,349 - INFO -  * Detected change in 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.2544.0_x64__qbz5n2kfra8p0\\Lib\\shlex.py', reloading
+2025-10-31 21:02:52,710 - INFO -  * Restarting with watchdog (windowsapi)
+2025-10-31 21:02:53,523 - INFO - 🚀 Démarrage du serveur Flask...
+2025-10-31 21:02:53,530 - WARNING -  * Debugger is active!
+2025-10-31 21:02:53,534 - INFO -  * Debugger PIN: 441-521-076

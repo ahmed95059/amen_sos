@@ -142,6 +142,10 @@ export default function ApprovalsPage() {
       setError('Veuillez sélectionner une signature avant validation.');
       return;
     }
+    if (!isSauvegarde && !(sig.type || '').startsWith('image/')) {
+      setError('Pour la validation directeur, la signature doit être une image (PNG/JPG).');
+      return;
+    }
 
     setBusyId(caseId);
     setError('');
@@ -322,7 +326,7 @@ export default function ApprovalsPage() {
                       <div className="w-full md:w-[320px] space-y-2">
                         <Input
                           type="file"
-                          accept="image/*,.pdf"
+                          accept={isSauvegarde ? 'image/*,.pdf' : 'image/*'}
                           onChange={(e) => setSignatureByCase((prev) => ({ ...prev, [c.id]: e.target.files?.[0] || null }))}
                         />
                         <Button

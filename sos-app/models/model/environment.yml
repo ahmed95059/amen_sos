@@ -1,0 +1,25 @@
+name: soulsketch-env
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.13
+  - colorama=0.4.6
+  - opencv=4.10.0
+  - pillow=10.4.0
+  - numpy=2.1.3 
+  - matplotlib=3.9.2
+  - scikit-learn=1.7.1
+  - jsonschema=4.23.0
+  - pyyaml=6.0.2
+  - pypdf2=3.0.1
+  - reportlab=4.2.5
+  - streamlit=1.39.0
+  - pip
+  - pip:
+      - ultralytics==8.3.221          # First release compatible with Python 3.13 (8.3.x branch)
+      - torch==2.9.0             # Works with Python 3.13
+      - torchvision==0.24.0      # Compatible with torch 2.7.x
+      - torchaudio==2.9.0

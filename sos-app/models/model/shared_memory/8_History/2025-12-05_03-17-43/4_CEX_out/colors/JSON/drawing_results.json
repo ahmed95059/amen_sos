@@ -1,0 +1,42 @@
+[
+    {
+        "color_name": "yellow",
+        "rgb": [
+            219,
+            207,
+            9
+        ],
+        "emotion": "Happiness",
+        "proportion": 10828
+    },
+    {
+        "color_name": "gray",
+        "rgb": [
+            107,
+            158,
+            168
+        ],
+        "emotion": "Sadness",
+        "proportion": 20750
+    },
+    {
+        "color_name": "green",
+        "rgb": [
+            12,
+            131,
+            23
+        ],
+        "emotion": "Calm",
+        "proportion": 12005
+    },
+    {
+        "color_name": "red",
+        "rgb": [
+            203,
+            58,
+            15
+        ],
+        "emotion": "Anger",
+        "proportion": 18163
+    }
+]

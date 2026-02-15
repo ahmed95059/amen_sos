@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Facial Expression Detection Results",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "description": "Detected facial expression label (e.g., happy_face, sad_face)"
+      },
+      "bbox": {
+        "type": "array",
+        "items": { "type": "number" },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Bounding box coordinates: [x1, y1, x2, y2]"
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "description": "Confidence score for the detected expression"
+      }
+    },
+    "required": ["label", "bbox", "confidence"]
+  }
+}

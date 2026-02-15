@@ -1,0 +1,96 @@
+{
+    "2087_tree": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 589,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                193
+            ],
+            "emotion": "Happiness",
+            "proportion": 680,
+            "is_unusual": true
+        }
+    ],
+    "5773_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 731,
+            "is_unusual": false
+        }
+    ],
+    "7500_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                187,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 749,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                224,
+                134,
+                164
+            ],
+            "emotion": "Happiness",
+            "proportion": 786,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                61
+            ],
+            "emotion": "Calm",
+            "proportion": 432,
+            "is_unusual": false
+        }
+    ]
+}

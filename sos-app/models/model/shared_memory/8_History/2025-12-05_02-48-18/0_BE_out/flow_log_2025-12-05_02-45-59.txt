@@ -1,0 +1,30 @@
+==================================================
+🚀 Full Analysis Flow Log
+🕒 Started at: 2025-12-05_02-45-59
+==================================================
+
+===========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py
+===========================================================================================================================================================
+[INFO] Loading YOLO model...
+[INFO] Checking for input image...
+[INFO] Input image found: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input\original_input.png
+[INFO] Running classification...
+[INFO] Creating probability plot...
+[INFO] Saving results to shared memory...
+[INFO] Emotion JSON saved → C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\1_EC_out\EC_result.json
+[SUCCESS] Emotion classification process completed.
+[EXIT CODE] 0
+✅ Finished: run_yolo_EMCLS
+
+
+================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\run_OBJ_DET.py
+================================================================================================================================================
+YOLO11s summary (fused): 100 layers, 9,413,961 parameters, 0 gradients, 21.3 GFLOPs
+Traceback (most recent call last):
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\run_OBJ_DET.py", line 95, in <module>
+    original_path = next(INPUT_DIR.glob("*.png"))
+StopIteration
+[EXIT CODE] 1
+❌ Error in run_OBJ_DET

@@ -1,0 +1,14 @@
+{
+    "label": "house",
+    "confidence": 0.7558800578117371,
+    "bbox": {
+        "x1": 112.5472183227539,
+        "y1": 117.48882293701172,
+        "x2": 351.73077392578125,
+        "y2": 423.1495361328125
+    },
+    "position": "bottom-center",
+    "size": "large",
+    "id": "4814_house",
+    "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/4814_house.png"
+}

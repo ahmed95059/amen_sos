@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "List of Emotional Colors",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "color_name": { "type": "string" },
+      "rgb": {
+        "type": "array",
+        "items": { "type": "integer" },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "emotion": { "type": "string" },
+      "is_unusual": { "type": "boolean" }
+    },
+    "required": ["color_name", "rgb", "emotion"]
+  }
+}

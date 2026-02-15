@@ -1,0 +1,955 @@
+{
+  "scene_level_emotions": {
+    "Happiness": {
+      "phrases": [
+        "elated",
+        "hope-infused",
+        "joyful",
+        "optimistic",
+        "playful",
+        "whimsical"
+      ],
+      "tone_variants": [
+        "bright",
+        "delightful",
+        "uplifting"
+      ],
+      "emotion_links": [
+        "yellow",
+        "pink"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "Sadness": {
+      "phrases": [
+        "emotionally distant",
+        "grieving",
+        "in mourning",
+        "melancholic",
+        "soulful",
+        "withdrawn"
+      ],
+      "tone_variants": [
+        "emotional",
+        "quiet",
+        "somber"
+      ],
+      "emotion_links": [
+        "blue",
+        "gray",
+        "black"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "Fear": {
+      "phrases": [
+        "anxious",
+        "insecure",
+        "tense"
+      ],
+      "tone_variants": [
+        "on edge",
+        "uneasy",
+        "unnerved"
+      ],
+      "emotion_links": [
+        "black",
+        "purple"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "Anger": {
+      "phrases": [
+        "aggressive",
+        "frustrated",
+        "irritated"
+      ],
+      "tone_variants": [
+        "emotionally heightened",
+        "explosive",
+        "fiery",
+        "intense"
+      ],
+      "emotion_links": [
+        "red",
+        "black"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "Calm": {
+      "phrases": [
+        "balanced",
+        "centering",
+        "emotionally regulated",
+        "internally quiet",
+        "peaceful",
+        "serene"
+      ],
+      "tone_variants": [
+        "gentle",
+        "restful",
+        "soothing"
+      ],
+      "emotion_links": [
+        "green",
+        "blue"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "Surprise": {
+      "phrases": [
+        "alert",
+        "amazed",
+        "startled"
+      ],
+      "tone_variants": [
+        "sudden",
+        "unexpected",
+        "vivid"
+      ],
+      "emotion_links": [
+        "orange",
+        "purple"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    }
+  },
+  "global_color_emotions": {
+    "yellow": {
+      "phrases": [
+        "affirming",
+        "cheerful",
+        "energetic",
+        "positive",
+        "spirited"
+      ],
+      "tone_variants": [
+        "bright",
+        "sunny",
+        "vibrant"
+      ],
+      "emotion_links": [
+        "Happiness",
+        "Optimism"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "pink": {
+      "phrases": [
+        "affectionate",
+        "comforting",
+        "emotionally warm",
+        "innocent",
+        "warm"
+      ],
+      "tone_variants": [
+        "gentle",
+        "sweet",
+        "tender"
+      ],
+      "emotion_links": [
+        "Love",
+        "Comfort"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "orange": {
+      "phrases": [
+        "creative",
+        "enthusiastic",
+        "stimulating"
+      ],
+      "tone_variants": [
+        "adventurous",
+        "bold",
+        "lively"
+      ],
+      "emotion_links": [
+        "Energy",
+        "Surprise"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "blue": {
+      "phrases": [
+        "deep",
+        "profound",
+        "reflective",
+        "sad",
+        "sorrowful"
+      ],
+      "tone_variants": [
+        "cool",
+        "thoughtful",
+        "tranquil"
+      ],
+      "emotion_links": [
+        "Sadness",
+        "Calm"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "green": {
+      "phrases": [
+        "balanced",
+        "emotionally regulated",
+        "intuitively drawn",
+        "natural",
+        "tranquil"
+      ],
+      "tone_variants": [
+        "centering",
+        "fresh",
+        "grounded",
+        "peaceful"
+      ],
+      "emotion_links": [
+        "Calm",
+        "Stability"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "red": {
+      "phrases": [
+        "angry",
+        "emotionally heightened",
+        "intense",
+        "resentful",
+        "vital"
+      ],
+      "tone_variants": [
+        "bold",
+        "heated",
+        "passionate"
+      ],
+      "emotion_links": [
+        "Anger",
+        "Love"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "purple": {
+      "phrases": [
+        "enigmatic",
+        "fearful",
+        "imaginative",
+        "mysterious"
+      ],
+      "tone_variants": [
+        "dreamlike",
+        "emotional",
+        "enigmatic"
+      ],
+      "emotion_links": [
+        "Fear",
+        "Fantasy"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "black": {
+      "phrases": [
+        "depressed",
+        "fearful",
+        "repressed",
+        "suppressed"
+      ],
+      "tone_variants": [
+        "dark",
+        "emotionally heightened",
+        "intense",
+        "opaque"
+      ],
+      "emotion_links": [
+        "Fear",
+        "Anger",
+        "Sadness"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "gray": {
+      "phrases": [
+        "ambiguous",
+        "emotionally flat",
+        "neutral",
+        "numb",
+        "unresolved"
+      ],
+      "tone_variants": [
+        "flat",
+        "foggy",
+        "soft"
+      ],
+      "emotion_links": [
+        "Ambivalence",
+        "Sadness"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    },
+    "brown": {
+      "phrases": [
+        "emotionally consistent",
+        "grounded",
+        "realistic",
+        "stable"
+      ],
+      "tone_variants": [
+        "earthy",
+        "reliable",
+        "solid"
+      ],
+      "emotion_links": [
+        "Security",
+        "Stability"
+      ],
+      "contextual_fit": [
+        "scene"
+      ]
+    }
+  },
+  "object_mappings": {
+    "person": {
+      "symbolism": {
+        "phrases": [
+          "identity",
+          "self",
+          "emotional expression"
+        ],
+        "tone_variants": [
+          "presence",
+          "the self",
+          "the human core"
+        ],
+        "contextual_fit": [
+          "person"
+        ]
+      },
+      "color_meaning": {
+        "normal": {
+          "phrases": [
+            "familiar",
+            "intuitively drawn",
+            "natural",
+            "realistic",
+            "recognizable"
+          ],
+          "tone_variants": [
+            "expected",
+            "recognizable",
+            "true to life"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "unusual": {
+          "phrases": [
+            "conflicted",
+            "imaginative",
+            "unusual"
+          ],
+          "tone_variants": [
+            "expressive",
+            "surreal",
+            "symbolic"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        }
+      },
+      "size_meaning": {
+        "small": {
+          "phrases": [
+            "insecure",
+            "minimized",
+            "vulnerable"
+          ],
+          "tone_variants": [
+            "diminished",
+            "fragile",
+            "reduced"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "medium": {
+          "phrases": [
+            "balanced",
+            "emotionally flat",
+            "emotionally regulated",
+            "neutral",
+            "present"
+          ],
+          "tone_variants": [
+            "emotionally consistent",
+            "harmonized",
+            "stable",
+            "typical"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "large": {
+          "phrases": [
+            "central",
+            "dominant",
+            "overwhelming"
+          ],
+          "tone_variants": [
+            "commanding",
+            "prominent",
+            "significant"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        }
+      },
+      "position": {
+        "top_left": {
+          "phrases": [
+            "dominant and past-oriented",
+            "elevated and reflective"
+          ],
+          "tone_variants": [
+            "nostalgic",
+            "rising",
+            "soaring"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "top_center": {
+          "phrases": [
+            "aspirational and balanced",
+            "central and elevated"
+          ],
+          "tone_variants": [
+            "anchored",
+            "idealized",
+            "superior"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "top_right": {
+          "phrases": [
+            "dominant and forward-looking",
+            "elevated and progressive"
+          ],
+          "tone_variants": [
+            "hopeful",
+            "rising",
+            "superior"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "bottom_left": {
+          "phrases": [
+            "hidden and reflective",
+            "subtle and past-oriented"
+          ],
+          "tone_variants": [
+            "buried",
+            "nostalgic",
+            "reduced"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "bottom_center": {
+          "phrases": [
+            "hidden but central",
+            "subtle but grounded"
+          ],
+          "tone_variants": [
+            "anchored",
+            "diminished",
+            "emotionally flat",
+            "neutral"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        },
+        "bottom_right": {
+          "phrases": [
+            "hidden and forward-looking",
+            "subtle and progressive"
+          ],
+          "tone_variants": [
+            "aspiring",
+            "buried",
+            "reduced"
+          ],
+          "contextual_fit": [
+            "person"
+          ]
+        }
+      },
+      "facial_expressions": {
+        "sad-face": {
+          "phrases": [
+            "deeply sad",
+            "grieving",
+            "in mourning",
+            "upset"
+          ],
+          "tone_variants": [
+            "heartbroken",
+            "mournful",
+            "tearful"
+          ],
+          "contextual_fit": [
+            "expression"
+          ]
+        },
+        "happy-face": {
+          "phrases": [
+            "cheerful",
+            "content",
+            "smiling",
+            "spirited"
+          ],
+          "tone_variants": [
+            "delighted",
+            "elated",
+            "joyful",
+            "radiant"
+          ],
+          "contextual_fit": [
+            "expression"
+          ]
+        },
+        "angry-face": {
+          "phrases": [
+            "angry",
+            "fuming",
+            "resentful",
+            "tense"
+          ],
+          "tone_variants": [
+            "agitated",
+            "furious",
+            "hostile"
+          ],
+          "contextual_fit": [
+            "expression"
+          ]
+        }
+      }
+    },
+    "house": {
+      "symbolism": {
+        "phrases": [
+          "safety",
+          "home",
+          "memory",
+          "stability"
+        ],
+        "tone_variants": [
+          "shelter",
+          "foundation",
+          "origin"
+        ],
+        "contextual_fit": [
+          "house"
+        ]
+      },
+      "color_meaning": {
+        "normal": {
+          "phrases": [
+            "domestic",
+            "familiar",
+            "realistic",
+            "recognizable"
+          ],
+          "tone_variants": [
+            "authentic",
+            "cozy",
+            "typical"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "unusual": {
+          "phrases": [
+            "dreamlike",
+            "imaginative",
+            "symbolic"
+          ],
+          "tone_variants": [
+            "fantasy-like",
+            "surreal",
+            "unexpected"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        }
+      },
+      "size_meaning": {
+        "small": {
+          "phrases": [
+            "fragile",
+            "hidden",
+            "vulnerable"
+          ],
+          "tone_variants": [
+            "minimal",
+            "quiet",
+            "subtle"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "medium": {
+          "phrases": [
+            "balanced",
+            "emotionally regulated",
+            "ordinary",
+            "settled"
+          ],
+          "tone_variants": [
+            "emotionally consistent",
+            "expected",
+            "regular",
+            "stable"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "large": {
+          "phrases": [
+            "dominant",
+            "protective",
+            "significant"
+          ],
+          "tone_variants": [
+            "emphasized",
+            "imposing",
+            "overwhelming"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        }
+      },
+      "position": {
+        "top_left": {
+          "phrases": [
+            "dominant and past-oriented",
+            "elevated and nostalgic"
+          ],
+          "tone_variants": [
+            "detached",
+            "idealized",
+            "superior"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "top_center": {
+          "phrases": [
+            "central and elevated",
+            "symbolic and stable"
+          ],
+          "tone_variants": [
+            "focal",
+            "idealized",
+            "secure"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "top_right": {
+          "phrases": [
+            "dominant and forward-facing",
+            "elevated and progressive"
+          ],
+          "tone_variants": [
+            "aspiring",
+            "hopeful",
+            "idealized"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "bottom_left": {
+          "phrases": [
+            "rooted and reflective",
+            "subtle and past-oriented"
+          ],
+          "tone_variants": [
+            "quiet",
+            "reminiscent",
+            "rooted"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "bottom_center": {
+          "phrases": [
+            "grounded and stable",
+            "neutral but protective"
+          ],
+          "tone_variants": [
+            "anchored",
+            "balanced",
+            "emotionally regulated",
+            "solid"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        },
+        "bottom_right": {
+          "phrases": [
+            "hidden but hopeful",
+            "subtle and forward-facing"
+          ],
+          "tone_variants": [
+            "aspiring",
+            "buried",
+            "progressive"
+          ],
+          "contextual_fit": [
+            "house"
+          ]
+        }
+      }
+    },
+    "tree": {
+      "symbolism": {
+        "phrases": [
+          "growth",
+          "nature",
+          "groundedness"
+        ],
+        "tone_variants": [
+          "life",
+          "organicity",
+          "roots"
+        ],
+        "contextual_fit": [
+          "tree"
+        ]
+      },
+      "color_meaning": {
+        "normal": {
+          "phrases": [
+            "earthy",
+            "emotionally consistent",
+            "intuitively drawn",
+            "natural",
+            "stable"
+          ],
+          "tone_variants": [
+            "familiar",
+            "organic",
+            "realistic",
+            "recognizable"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "unusual": {
+          "phrases": [
+            "distorted",
+            "fantastical",
+            "strange"
+          ],
+          "tone_variants": [
+            "artificial",
+            "dreamlike",
+            "inventive"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        }
+      },
+      "size_meaning": {
+        "small": {
+          "phrases": [
+            "minimized",
+            "underdeveloped"
+          ],
+          "tone_variants": [
+            "delicate",
+            "shrinking",
+            "tiny"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "medium": {
+          "phrases": [
+            "balanced",
+            "emotionally regulated",
+            "intuitively drawn",
+            "natural"
+          ],
+          "tone_variants": [
+            "emotionally flat",
+            "moderate",
+            "neutral",
+            "regular"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "large": {
+          "phrases": [
+            "important",
+            "towering"
+          ],
+          "tone_variants": [
+            "dominant",
+            "massive",
+            "symbolic"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        }
+      },
+      "position": {
+        "top_left": {
+          "phrases": [
+            "aspiring and grounded",
+            "growing towards the past"
+          ],
+          "tone_variants": [
+            "dominant",
+            "historical",
+            "reaching"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "top_center": {
+          "phrases": [
+            "central and symbolic",
+            "reaching towards the sky"
+          ],
+          "tone_variants": [
+            "balanced",
+            "emotionally regulated",
+            "soaring",
+            "symbolic"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "top_right": {
+          "phrases": [
+            "forward-growing",
+            "rising towards the future"
+          ],
+          "tone_variants": [
+            "evolving",
+            "hopeful",
+            "strong"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "bottom_left": {
+          "phrases": [
+            "anchored in history",
+            "rooted and stable"
+          ],
+          "tone_variants": [
+            "grounded",
+            "reminiscent",
+            "safe"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "bottom_center": {
+          "phrases": [
+            "rooted and central",
+            "symbolic and grounded"
+          ],
+          "tone_variants": [
+            "balanced",
+            "emotionally regulated",
+            "safe",
+            "secure"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        },
+        "bottom_right": {
+          "phrases": [
+            "rooted and forward-thinking",
+            "subtle and progressive"
+          ],
+          "tone_variants": [
+            "aspiring",
+            "balanced",
+            "emotionally regulated",
+            "grounded"
+          ],
+          "contextual_fit": [
+            "tree"
+          ]
+        }
+      }
+    }
+  }
+}

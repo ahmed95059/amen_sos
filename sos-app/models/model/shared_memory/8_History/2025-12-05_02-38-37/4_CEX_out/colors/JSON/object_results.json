@@ -1,0 +1,1130 @@
+{
+    "0017_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 589,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                193
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "0165_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        }
+    ],
+    "0350_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 731,
+            "is_unusual": false
+        }
+    ],
+    "0700_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        }
+    ],
+    "0767_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                185,
+                209
+            ],
+            "emotion": "Happiness",
+            "proportion": 800,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                223,
+                131,
+                162
+            ],
+            "emotion": "Happiness",
+            "proportion": 787,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 422,
+            "is_unusual": false
+        }
+    ],
+    "0793_house": [
+        {
+            "color_name": "brown",
+            "rgb": [
+                188,
+                60,
+                65
+            ],
+            "emotion": "Calm",
+            "proportion": 479,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                187,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 735,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                225,
+                137,
+                165
+            ],
+            "emotion": "Happiness",
+            "proportion": 760,
+            "is_unusual": false
+        }
+    ],
+    "1030_tree": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                153,
+                117
+            ],
+            "emotion": "Sadness",
+            "proportion": 155,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                183,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 678,
+            "is_unusual": true
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        }
+    ],
+    "1283_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                183,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 679,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                153,
+                117
+            ],
+            "emotion": "Sadness",
+            "proportion": 155,
+            "is_unusual": false
+        }
+    ],
+    "1341_tree": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        }
+    ],
+    "1452_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                185,
+                209
+            ],
+            "emotion": "Happiness",
+            "proportion": 802,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 422,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                223,
+                131,
+                161
+            ],
+            "emotion": "Happiness",
+            "proportion": 790,
+            "is_unusual": false
+        }
+    ],
+    "1744_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        }
+    ],
+    "2144_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "2259_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                193
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        }
+    ],
+    "2984_tree": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "3333_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                225,
+                136,
+                164
+            ],
+            "emotion": "Happiness",
+            "proportion": 764,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                188,
+                60,
+                65
+            ],
+            "emotion": "Calm",
+            "proportion": 480,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                187,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 747,
+            "is_unusual": false
+        }
+    ],
+    "4160_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        }
+    ],
+    "4344_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                186,
+                210
+            ],
+            "emotion": "Happiness",
+            "proportion": 761,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                224,
+                133,
+                164
+            ],
+            "emotion": "Happiness",
+            "proportion": 797,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                59,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 421,
+            "is_unusual": false
+        }
+    ],
+    "4349_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                131,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 678,
+            "is_unusual": false
+        }
+    ],
+    "4675_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                226,
+                138,
+                168
+            ],
+            "emotion": "Happiness",
+            "proportion": 743,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                59,
+                66
+            ],
+            "emotion": "Calm",
+            "proportion": 483,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                188,
+                212
+            ],
+            "emotion": "Happiness",
+            "proportion": 714,
+            "is_unusual": false
+        }
+    ],
+    "5215_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        }
+    ],
+    "5244_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                182,
+                210
+            ],
+            "emotion": "Happiness",
+            "proportion": 692,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                130,
+                167
+            ],
+            "emotion": "Happiness",
+            "proportion": 748,
+            "is_unusual": false
+        }
+    ],
+    "5268_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                188,
+                212
+            ],
+            "emotion": "Happiness",
+            "proportion": 711,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                57,
+                64
+            ],
+            "emotion": "Calm",
+            "proportion": 445,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                225,
+                137,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 753,
+            "is_unusual": false
+        }
+    ],
+    "5456_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                226,
+                138,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 737,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                58,
+                66
+            ],
+            "emotion": "Calm",
+            "proportion": 476,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                188,
+                212
+            ],
+            "emotion": "Happiness",
+            "proportion": 708,
+            "is_unusual": false
+        }
+    ],
+    "5563_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 731,
+            "is_unusual": false
+        }
+    ],
+    "5637_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                185,
+                209
+            ],
+            "emotion": "Happiness",
+            "proportion": 802,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 423,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                223,
+                131,
+                162
+            ],
+            "emotion": "Happiness",
+            "proportion": 786,
+            "is_unusual": false
+        }
+    ],
+    "6166_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 589,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                183,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 681,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                153,
+                117
+            ],
+            "emotion": "Sadness",
+            "proportion": 155,
+            "is_unusual": false
+        }
+    ],
+    "6744_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                225,
+                136,
+                168
+            ],
+            "emotion": "Happiness",
+            "proportion": 766,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                186,
+                57,
+                62
+            ],
+            "emotion": "Calm",
+            "proportion": 436,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                188,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 726,
+            "is_unusual": false
+        }
+    ],
+    "6920_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 731,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        }
+    ],
+    "8074_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 731,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        }
+    ],
+    "8146_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 588,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                193
+            ],
+            "emotion": "Happiness",
+            "proportion": 680,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "8480_tree": [
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "8787_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                235,
+                183,
+                211
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                132,
+                169
+            ],
+            "emotion": "Happiness",
+            "proportion": 732,
+            "is_unusual": false
+        }
+    ],
+    "9315_tree": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                192
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        }
+    ],
+    "9336_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                223,
+                131,
+                161
+            ],
+            "emotion": "Happiness",
+            "proportion": 791,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                185,
+                209
+            ],
+            "emotion": "Happiness",
+            "proportion": 802,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 422,
+            "is_unusual": false
+        }
+    ],
+    "9345_house": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                223,
+                131,
+                162
+            ],
+            "emotion": "Happiness",
+            "proportion": 785,
+            "is_unusual": false
+        },
+        {
+            "color_name": "brown",
+            "rgb": [
+                187,
+                60,
+                60
+            ],
+            "emotion": "Calm",
+            "proportion": 423,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                233,
+                185,
+                209
+            ],
+            "emotion": "Happiness",
+            "proportion": 800,
+            "is_unusual": false
+        }
+    ],
+    "9704_tree": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                115,
+                154,
+                119
+            ],
+            "emotion": "Sadness",
+            "proportion": 161,
+            "is_unusual": false
+        },
+        {
+            "color_name": "yellow",
+            "rgb": [
+                240,
+                240,
+                27
+            ],
+            "emotion": "Happiness",
+            "proportion": 590,
+            "is_unusual": false
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                184,
+                194,
+                193
+            ],
+            "emotion": "Happiness",
+            "proportion": 676,
+            "is_unusual": true
+        }
+    ]
+}

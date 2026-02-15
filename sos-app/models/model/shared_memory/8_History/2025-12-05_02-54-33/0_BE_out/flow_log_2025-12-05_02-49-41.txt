@@ -1,0 +1,31 @@
+==================================================
+🚀 Full Analysis Flow Log
+🕒 Started at: 2025-12-05_02-49-41
+==================================================
+
+===========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py
+===========================================================================================================================================================
+[INFO] Loading YOLO model...
+[INFO] Checking for input image...
+[INFO] Input image found: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input\original_input.png
+[INFO] Running classification...
+[INFO] Creating probability plot...
+[INFO] Saving results to shared memory...
+[INFO] Emotion JSON saved → C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\1_EC_out\EC_result.json
+[SUCCESS] Emotion classification process completed.
+[EXIT CODE] 0
+✅ Finished: run_yolo_EMCLS
+
+
+================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\run_OBJ_DET.py
+================================================================================================================================================
+YOLO11s summary (fused): 100 layers, 9,413,961 parameters, 0 gradients, 21.3 GFLOPs
+[INFO] Looking for input image in: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\model\shared_memory\0_BE_input
+[INFO] INPUT_DIR exists: False
+[INFO] Found 0 PNG files: []
+[ERROR] No PNG file found in C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\model\shared_memory\0_BE_input
+[ERROR] Please upload an image first using the Streamlit interface
+[EXIT CODE] 1
+❌ Error in run_OBJ_DET

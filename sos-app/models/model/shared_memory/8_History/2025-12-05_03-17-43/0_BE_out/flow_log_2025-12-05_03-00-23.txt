@@ -1,0 +1,460 @@
+==================================================
+🚀 Full Analysis Flow Log
+🕒 Started at: 2025-12-05_03-00-23
+==================================================
+
+===========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py
+===========================================================================================================================================================
+[INFO] Loading YOLO model...
+[INFO] Checking for input image...
+[INFO] Input image found: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input\original_input.png
+[INFO] Running classification...
+[INFO] Creating probability plot...
+[INFO] Saving results to shared memory...
+[INFO] Emotion JSON saved → C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\1_EC_out\EC_result.json
+[SUCCESS] Emotion classification process completed.
+[EXIT CODE] 0
+✅ Finished: run_yolo_EMCLS
+
+
+================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\run_OBJ_DET.py
+================================================================================================================================================
+YOLO11s summary (fused): 100 layers, 9,413,961 parameters, 0 gradients, 21.3 GFLOPs
+[INFO] Looking for input image in: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input
+[INFO] INPUT_DIR exists: True
+[INFO] Found 1 PNG files: ['original_input.png']
+[INFO] Using input image: original_input.png
+[SAVE] Processed image copied to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\2_OBJ_DET_out\processed_input.png
+[RUN] YOLO detection on: temp\processed_input.png
+[INFO] 3 object(s) detected.
+[SAVED] 3844_tree → colored
+[SAVED] 7461_person → colored
+[SAVED] 7428_tree → colored
+[RUN] YOLO detection on: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input\original_input.png
+[INFO] 1 object(s) detected.
+[SAVED] 4814_house → colored
+[SAVE] Plots copied to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\2_OBJ_DET_out\plots
+[CLEAN] Temporary folder removed.
+[DONE] Object detection pipeline complete.
+[EXIT CODE] 0
+✅ Finished: run_OBJ_DET
+
+
+========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\run_FED.py
+========================================================================================================================================================
+[INFO] Starting facial expression detection pipeline...
+[INFO] Loading model...
+[INFO] Running detection...
+
+image 1/1 C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\..\shared_memory\0_BE_input\original_input.png: 448x640 (no detections), 172.6ms
+Speed: 1.9ms preprocess, 172.6ms inference, 0.7ms postprocess per image at shape (1, 3, 448, 640)
+[INFO] Filtering results...
+[INFO] 0 facial expressions detected.
+[INFO] Saving detections to JSON...
+[INFO] Generating diagnostic plots...
+[INFO] Cropping expression regions...
+[INFO] Saved 0 facial crops to C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\temp\crops
+[INFO] Saving all outputs to shared memory...
+[INFO] Shared memory updated at C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\3_FED_out\facial_expressions
+[INFO] Facial expression detection pipeline completed successfully.
+[INFO] Cleaning temp directory...
+[EXIT CODE] 0
+✅ Finished: run_FED
+
+
+============================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\colors_extractor\run_CEX.py
+============================================================================================================================================
+[INFO] Starting color extraction pipeline (CEX)...
+[INFO] Processing original drawing...
+[INFO] Processing object crops...
+[INFO] Processing facial expression crops...
+[INFO] Saving results to shared memory...
+[INFO] Shared memory updated at C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\4_CEX_out\colors
+[INFO] Cleaning up temp directory...
+[INFO] Color extraction pipeline completed successfully.
+[EXIT CODE] 0
+✅ Finished: run_CEX
+
+
+=========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\json_builder\run_JB_A.py
+=========================================================================================================================================
+==================================================
+Running JSON Builder - Part A
+==================================================
+
+Running: json_builder/get_data_from_shared.py
+[VALID] EC_result.json is valid against EC_json_scheme.json
+[VALID] 3844_tree.json is valid against OBJ_DET_json_scheme.json
+[VALID] 4814_house.json is valid against OBJ_DET_json_scheme.json
+[VALID] 7428_tree.json is valid against OBJ_DET_json_scheme.json
+[VALID] 7461_person.json is valid against OBJ_DET_json_scheme.json
+[VALID] expressions.json is valid against FED_json_scheme.json
+[VALID] drawing_results.json is valid against CEX_list_scheme.json
+[VALID] object_results.json is valid against CEX_dict_scheme.json
+[VALID] facial_expression_results.json is valid against CEX_dict_scheme.json
+{
+    "drawing_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input.png",
+    "drawing_bw_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\0_BE_input\\original_input_BW.png",
+    "emotional_classification": {
+        "label": "Happiness",
+        "confidence": 0.9992775321006775
+    },
+    "object_detection": {
+        "3844_tree": {
+            "label": "tree",
+            "confidence": 0.6432738900184631,
+            "bbox": {
+                "x1": 5.085659027099609,
+                "y1": 284.1007995605469,
+                "x2": 65.86988830566406,
+                "y2": 399.76019287109375
+            },
+            "position": "bottom-left",
+            "size": "medium",
+            "id": "3844_tree",
+            "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/3844_tree.png"
+        },
+        "4814_house": {
+            "label": "house",
+            "confidence": 0.7558800578117371,
+            "bbox": {
+                "x1": 112.5472183227539,
+                "y1": 117.48882293701172,
+                "x2": 351.73077392578125,
+                "y2": 423.1495361328125
+            },
+            "position": "bottom-center",
+            "size": "large",
+            "id": "4814_house",
+            "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/4814_house.png"
+        },
+        "7428_tree": {
+            "label": "tree",
+            "confidence": 0.296072781085968,
+            "bbox": {
+                "x1": 422.0497741699219,
+                "y1": 248.2790069580078,
+                "x2": 484.30523681640625,
+                "y2": 396.82568359375
+            },
+            "position": "bottom-right",
+            "size": "medium",
+            "id": "7428_tree",
+            "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/7428_tree.png"
+        },
+        "7461_person": {
+            "label": "person",
+            "confidence": 0.30938848853111267,
+            "bbox": {
+                "x1": 113.15917205810547,
+                "y1": 118.4194107055664,
+                "x2": 352.7644348144531,
+                "y2": 424.794189453125
+            },
+            "position": "bottom-center",
+            "size": "large",
+            "id": "7461_person",
+            "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/7461_person.png"
+        }
+    },
+    "facial_expressions": [],
+    "color_extraction": {
+        "drawing": [
+            {
+                "color_name": "yellow",
+                "rgb": [
+                    219,
+                    207,
+                    9
+                ],
+                "emotion": "Happiness",
+                "proportion": 10828
+            },
+            {
+                "color_name": "gray",
+                "rgb": [
+                    107,
+                    158,
+                    168
+                ],
+                "emotion": "Sadness",
+                "proportion": 20750
+            },
+            {
+                "color_name": "green",
+                "rgb": [
+                    12,
+                    131,
+                    23
+                ],
+                "emotion": "Calm",
+                "proportion": 12005
+            },
+            {
+                "color_name": "red",
+                "rgb": [
+                    203,
+                    58,
+                    15
+                ],
+                "emotion": "Anger",
+                "proportion": 18163
+            }
+        ],
+        "objects": {
+            "3844_tree": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        204,
+                        75,
+                        37
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 601,
+                    "is_unusual": true
+                },
+                {
+                    "color_name": "green",
+                    "rgb": [
+                        34,
+                        163,
+                        47
+                    ],
+                    "emotion": "Calm",
+                    "proportion": 720,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "purple",
+                    "rgb": [
+                        80,
+                        72,
+                        146
+                    ],
+                    "emotion": "Fear",
+                    "proportion": 197,
+                    "is_unusual": true
+                }
+            ],
+            "4814_house": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        208,
+                        58,
+                        11
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 15299,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        219,
+                        208,
+                        4
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 2838,
+                    "is_unusual": false
+                }
+            ],
+            "7428_tree": [
+                {
+                    "color_name": "green",
+                    "rgb": [
+                        57,
+                        178,
+                        65
+                    ],
+                    "emotion": "Calm",
+                    "proportion": 661,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        241,
+                        218,
+                        33
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 240,
+                    "is_unusual": false
+                }
+            ],
+            "7461_person": [
+                {
+                    "color_name": "red",
+                    "rgb": [
+                        208,
+                        58,
+                        11
+                    ],
+                    "emotion": "Anger",
+                    "proportion": 15282,
+                    "is_unusual": false
+                },
+                {
+                    "color_name": "yellow",
+                    "rgb": [
+                        219,
+                        209,
+                        4
+                    ],
+                    "emotion": "Happiness",
+                    "proportion": 2836,
+                    "is_unusual": false
+                }
+            ]
+        },
+        "expressions": {}
+    }
+}
+
+[DONE] json_builder/get_data_from_shared.py
+
+Running: json_builder/build_pre_analysis_format.py
+[INFO] Building pre-analysis format...
+[VALID] EC_result.json is valid against EC_json_scheme.json
+[VALID] 3844_tree.json is valid against OBJ_DET_json_scheme.json
+[VALID] 4814_house.json is valid against OBJ_DET_json_scheme.json
+[VALID] 7428_tree.json is valid against OBJ_DET_json_scheme.json
+[VALID] 7461_person.json is valid against OBJ_DET_json_scheme.json
+[VALID] expressions.json is valid against FED_json_scheme.json
+[VALID] drawing_results.json is valid against CEX_list_scheme.json
+[VALID] object_results.json is valid against CEX_dict_scheme.json
+[VALID] facial_expression_results.json is valid against CEX_dict_scheme.json
+[INFO] Pre-analysis JSON saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\5_JSON_out\pre_analysis.json
+[INFO] Validating pre-analysis JSON against schema...
+[VALID] pre_analysis.json is valid against pre_analysis_scheme.json
+
+[DONE] json_builder/build_pre_analysis_format.py
+[EXIT CODE] 0
+✅ Finished: run_JB_A
+
+
+=============================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\analysis_generator\run_AG.py
+=============================================================================================================================================
+Running Analysis Generator...
+[INFO] Analysis JSON saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\6_AG_out\analysis_text.json
+# Emotional Analysis
+**Main Emotion:** **happiness**
+## Scene
+The overall mood is quite **happiness** (0.999).
+**yellow** in the background hints at a **energetic** feeling.
+The choice of **gray** likely connects to a **neutral** tone.
+The use of **green** gives a **emotionally regulated** feeling.
+This **red** color brings out something **resentful**.
+## Objects
+### 3844_tree
+The tree could symbolize **nature**.
+These artistic choices make the tree look **intense**.
+The medium size tree feels **balanced**.
+Bottom-left position makes the tree feel **safe** and **rooted and stable**.
+### 4814_house
+The house may symbolize **stability**.
+This coloring feels deeply **vital**.
+The large size of the house evokes **dominant**.
+In the bottom-center, the house grounds the drawing with **grounded and stable**.
+### 7428_tree
+Trees often reflect **groundedness** themes, seen here clearly.
+The tree's natural colors evoke a **tranquil** impression.
+The medium size tree feels **natural**.
+Bottom-right tree presence adds **rooted and forward-thinking** and **grounded** depth.
+### 7461_person
+This figure brings to mind ideas of **identity**.
+Their appearance feels **vital**, fitting the context.
+Their dominant size enhances the sense of **dominant**.
+The bottom center placement adds a **neutral** tone of **hidden but central**.
+## Facial Expressions
+[INFO] JSON summary saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\6_AG_out\analysis_text.json
+
+Analysis Generator finished.
+[EXIT CODE] 0
+✅ Finished: run_AG
+
+
+=========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\json_builder\run_JB_B.py
+=========================================================================================================================================
+==================================================
+Running JSON Builder - Part B
+==================================================
+
+Running: json_builder/build_post_analysis_format.py
+[INFO] Building post-analysis format...
+[INFO] Post-analysis JSON saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\5_JSON_out\post_analysis.json
+
+[DONE] Script completed: json_builder/build_post_analysis_format.py
+[EXIT CODE] 0
+✅ Finished: run_JB_B
+
+
+==========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\run_PDFG.py
+==========================================================================================================================================
+==================================================
+       Starting PDF Generation Segment
+==================================================
+
+Running with .venv Python: build_sources_folder.py
+
+[DONE] build_sources_folder.py completed successfully
+
+Running with .venv Python: build_full_report.py
+PAGES_DIR: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\7_PDFG_out
+ASSETS: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\assets
+bASE_DIR: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator
+shared: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory
+
+========== OBJECT ID COMPARISON ==========
+
+Object ID: 3844
+Expected crop key: OBJDET_crop_3844
+Expected plot key: CEX_object_3844
+Actual crop path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\OBJDET\objects\images\OBJDET_3844_tree.png
+Actual plot path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\CEX\objects\plots\CEX_object_3844_tree.png
+
+Object ID: 4814
+Expected crop key: OBJDET_crop_4814
+Expected plot key: CEX_object_4814
+Actual crop path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\OBJDET\objects\images\OBJDET_4814_house.png
+Actual plot path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\CEX\objects\plots\CEX_object_4814_house.png
+
+Object ID: 7428
+Expected crop key: OBJDET_crop_7428
+Expected plot key: CEX_object_7428
+Actual crop path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\OBJDET\objects\images\OBJDET_7428_tree.png
+Actual plot path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\CEX\objects\plots\CEX_object_7428_tree.png
+
+Object ID: 7461
+Expected crop key: OBJDET_crop_7461
+Expected plot key: CEX_object_7461
+Actual crop path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\OBJDET\objects\images\OBJDET_7461_person.png
+Actual plot path: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources\CEX\objects\plots\CEX_object_7461_person.png
+
+========== EXPRESSION ID COMPARISON ==========
+
+[WARNING] Ghostscript not found - skipping compression: Ghostscript executable not found at external_tools/gs9-55/bin/gswin64c.exe
+[INFO] Uncompressed PDF saved: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\7_PDFG_out\full_analysis_report.pdf
+[SUCCESS] Final PDF saved at: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\7_PDFG_out\full_analysis_report.pdf
+
+[DONE] build_full_report.py completed successfully
+[CLEANUP] Deleted sources folder at: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources
+PDF Generation completed and sources folder cleaned.
+[EXIT CODE] 0
+✅ Finished: run_PDFG
+
+
+==================================================
+✅ Full PDF report generated successfully.
+==================================================

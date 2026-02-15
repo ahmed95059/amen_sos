@@ -1,0 +1,203 @@
+==================================================
+🚀 Full Analysis Flow Log
+🕒 Started at: 2025-12-05_02-24-08
+==================================================
+
+===========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\emotional_classification\run_yolo_EMCLS.py
+===========================================================================================================================================================
+[INFO] Loading YOLO model...
+[INFO] Checking for input image...
+[INFO] Input image found: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\0_BE_input\original_input.png
+[INFO] Running classification...
+[INFO] Creating probability plot...
+[INFO] Saving results to shared memory...
+[INFO] Emotion JSON saved → C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\1_EC_out\EC_result.json
+[SUCCESS] Emotion classification process completed.
+[EXIT CODE] 0
+✅ Finished: run_yolo_EMCLS
+
+
+================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\object_detection\run_OBJ_DET.py
+================================================================================================================================================
+YOLO11s summary (fused): 100 layers, 9,413,961 parameters, 0 gradients, 21.3 GFLOPs
+[SAVE] Processed image copied to: C:\shared_memory\2_OBJ_DET_out\processed_input.png
+[RUN] YOLO detection on: temp\processed_input.png
+[INFO] 2 object(s) detected.
+[SAVED] 0350_house → colored
+[SAVED] 1341_tree → colored
+[RUN] YOLO detection on: C:\shared_memory\0_BE_input\original_input.png
+[INFO] 1 object(s) detected.
+[SAVED] 3333_house → colored
+[SAVE] Plots copied to: C:\shared_memory\2_OBJ_DET_out\plots
+[CLEAN] Temporary folder removed.
+[DONE] Object detection pipeline complete.
+[EXIT CODE] 0
+✅ Finished: run_OBJ_DET
+
+
+========================================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\run_FED.py
+========================================================================================================================================================
+[INFO] Starting facial expression detection pipeline...
+[INFO] Loading model...
+[INFO] Running detection...
+
+image 1/1 C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\..\shared_memory\0_BE_input\original_input.png: 480x640 3 happy_faces, 179.9ms
+Speed: 2.2ms preprocess, 179.9ms inference, 1.3ms postprocess per image at shape (1, 3, 480, 640)
+[INFO] Filtering results...
+[INFO] 3 facial expressions detected.
+[INFO] Saving detections to JSON...
+[INFO] Generating diagnostic plots...
+[INFO] Cropping expression regions...
+[INFO] Saved 3 facial crops to C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\facial_expressions_detection\temp\crops
+[INFO] Saving all outputs to shared memory...
+[INFO] Shared memory updated at C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\3_FED_out\facial_expressions
+[INFO] Facial expression detection pipeline completed successfully.
+[INFO] Cleaning temp directory...
+[EXIT CODE] 0
+✅ Finished: run_FED
+
+
+============================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\colors_extractor\run_CEX.py
+============================================================================================================================================
+C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\colors_extractor\models\plot_color_emotions.py:100: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, ax = plt.subplots(figsize=(6, 5))
+C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\colors_extractor\models\plot_color_emotions.py:109: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, axs = plt.subplots(1, 2, figsize=(14, 6))
+C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\colors_extractor\models\plot_color_emotions.py:63: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig, ax = plt.subplots(figsize=(6, fig_height))
+[INFO] Starting color extraction pipeline (CEX)...
+[INFO] Processing original drawing...
+[INFO] Processing object crops...
+[INFO] Processing facial expression crops...
+[WARN] Facial crops directory does not exist: C:\shared_memory\3_FED_out\facial_expressions\crops
+[INFO] Saving results to shared memory...
+[INFO] Shared memory updated at C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\4_CEX_out\colors
+[INFO] Cleaning up temp directory...
+[INFO] Color extraction pipeline completed successfully.
+[EXIT CODE] 0
+✅ Finished: run_CEX
+
+
+=========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\json_builder\run_JB_A.py
+=========================================================================================================================================
+==================================================
+Running JSON Builder - Part A
+==================================================
+
+Running: json_builder/get_data_from_shared.py
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\1_EC_out\EC_result.json
+[WARN] Missing object detection JSONs: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\2_OBJ_DET_out\objects\colored\jsons
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\3_FED_out\facial_expressions\expressions.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\drawing_results.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\object_results.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\facial_expression_results.json
+{
+    "drawing_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\shared_memory\\0_BE_input\\original_input.png",
+    "drawing_bw_image_path": "C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\shared_memory\\0_BE_input\\original_input_BW.png",
+    "emotional_classification": {},
+    "object_detection": {},
+    "facial_expressions": {},
+    "color_extraction": {
+        "drawing": {},
+        "objects": {},
+        "expressions": {}
+    }
+}
+
+[DONE] json_builder/get_data_from_shared.py
+
+Running: json_builder/build_pre_analysis_format.py
+[INFO] Building pre-analysis format...
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\1_EC_out\EC_result.json
+[WARN] Missing object detection JSONs: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\2_OBJ_DET_out\objects\colored\jsons
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\3_FED_out\facial_expressions\expressions.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\drawing_results.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\object_results.json
+[WARN] Missing: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\shared_memory\4_CEX_out\colors\JSON\facial_expression_results.json
+[INFO] Pre-analysis JSON saved to: C:\shared_memory\5_JSON_out\pre_analysis.json
+[INFO] Validating pre-analysis JSON against schema...
+[INVALID] pre_analysis.json failed validation:
+None is not of type 'number'
+
+[DONE] json_builder/build_pre_analysis_format.py
+[EXIT CODE] 0
+✅ Finished: run_JB_A
+
+
+=============================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\analysis_generator\run_AG.py
+=============================================================================================================================================
+Running Analysis Generator...
+[INFO] Analysis JSON saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\6_AG_out\analysis_text.json
+# Emotional Analysis
+**Main Emotion:** **unknown**
+## Scene
+You can sense a **unknown** (0.000) atmosphere here.
+## Objects
+## Facial Expressions
+[INFO] JSON summary saved to: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\6_AG_out\analysis_text.json
+
+Analysis Generator finished.
+[EXIT CODE] 0
+✅ Finished: run_AG
+
+
+=========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\json_builder\run_JB_B.py
+=========================================================================================================================================
+==================================================
+Running JSON Builder - Part B
+==================================================
+
+Running: json_builder/build_post_analysis_format.py
+[INFO] Building post-analysis format...
+[INFO] Post-analysis JSON saved to: C:\shared_memory\5_JSON_out\post_analysis.json
+
+[DONE] Script completed: json_builder/build_post_analysis_format.py
+[EXIT CODE] 0
+✅ Finished: run_JB_B
+
+
+==========================================================================================================================================
+▶ Running: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\run_PDFG.py
+==========================================================================================================================================
+==================================================
+       Starting PDF Generation Segment
+==================================================
+
+Running with .venv Python: build_sources_folder.py
+
+[DONE] build_sources_folder.py completed successfully
+
+Running with .venv Python: build_full_report.py
+PAGES_DIR: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory\7_PDFG_out
+ASSETS: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\assets
+bASE_DIR: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator
+shared: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\shared_memory
+Traceback (most recent call last):
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\build_full_report.py", line 256, in <module>
+    run()
+  File "C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\build_full_report.py", line 109, in run
+    post_analysis = json.loads((SHARED / "5_JSON_out/post_analysis.json").read_text())
+  File "C:\Users\MSI\AppData\Local\Programs\Python\Python310\lib\pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "C:\Users\MSI\AppData\Local\Programs\Python\Python310\lib\pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\MSI\\Desktop\\projet_web\\embs\\v0-mother-health-app-main\\backend\\emotional_classification\\model\\shared_memory\\5_JSON_out\\post_analysis.json'
+
+[ERROR] Script failed: build_full_report.py
+[ERROR] PDF Generation failed: Script failed: build_full_report.py
+[CLEANUP] Deleted sources folder at: C:\Users\MSI\Desktop\projet_web\embs\v0-mother-health-app-main\backend\emotional_classification\model\pdf_generator\sources
+PDF Generation completed and sources folder cleaned.
+[EXIT CODE] 0
+✅ Finished: run_PDFG
+
+
+==================================================
+❌ No PDF file found or file is empty.
+==================================================

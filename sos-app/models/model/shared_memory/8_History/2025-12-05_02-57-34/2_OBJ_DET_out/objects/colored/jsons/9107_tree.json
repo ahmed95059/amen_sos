@@ -1,0 +1,14 @@
+{
+    "label": "tree",
+    "confidence": 0.6037648320198059,
+    "bbox": {
+        "x1": 173.45689392089844,
+        "y1": 165.3666229248047,
+        "x2": 282.1626281738281,
+        "y2": 317.8764953613281
+    },
+    "position": "bottom-center",
+    "size": "medium",
+    "id": "9107_tree",
+    "crop_path": "C:/Users/MSI/Desktop/projet_web/embs/v0-mother-health-app-main/backend/emotional_classification/model/shared_memory/2_OBJ_DET_out/objects/colored/crops/9107_tree.png"
+}

@@ -1,0 +1,37 @@
+# Terminal formatting
+colorama==0.4.6
+
+# Image processing & computer vision
+opencv-python==4.11.0.86
+pillow==11.2.1
+
+# Data handling & plotting
+numpy==1.26.4
+matplotlib==3.10.1
+
+# Machine learning
+scikit-learn==1.6.1
+
+# JSON & schema validation
+jsonschema==4.23.0
+pyyaml==6.0.2
+
+# PDF generation and handling
+PyPDF2==3.0.1
+reportlab==4.4.0
+
+# Web app
+streamlit==1.44.1
+
+# Flask for API
+flask
+flask_cors
+
+# Deep learning (YOLO + PyTorch CPU) - Install from PyTorch repo
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+
+# Ultralytics YOLO (latest compatible version)
+ultralytics

@@ -1,0 +1,35 @@
+# Terminal formatting
+colorama==0.4.6
+
+# Image processing & computer vision
+opencv-python==4.11.0.86
+pillow==11.2.1
+
+# Data handling & plotting
+numpy==1.26.4
+matplotlib==3.10.1
+
+# Machine learning
+scikit-learn==1.6.1
+
+# JSON & schema validation
+jsonschema==4.23.0
+pyyaml==6.0.2
+
+# PDF generation and handling
+PyPDF2==3.0.1
+reportlab==4.4.0
+
+# Web app
+streamlit==1.44.1
+
+# Deep learning (YOLO + PyTorch CPU)
+ultralytics==8.3.116
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
+torchaudio==2.2.2+cpu
+flask
+PyPDF2
+flask_cors
+# Required for CPU wheels (MUST be at the end)
+-f https://download.pytorch.org/whl/torch_stable.html

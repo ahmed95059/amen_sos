@@ -1,0 +1,88 @@
+{
+    "happy_face_1": [
+        {
+            "color_name": "gray",
+            "rgb": [
+                158,
+                101,
+                121
+            ],
+            "emotion": "Sadness",
+            "proportion": 128
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                191,
+                155,
+                172
+            ],
+            "emotion": "Happiness",
+            "proportion": 76
+        }
+    ],
+    "happy_face_2": [
+        {
+            "color_name": "purple",
+            "rgb": [
+                114,
+                37,
+                83
+            ],
+            "emotion": "Fear",
+            "proportion": 28
+        },
+        {
+            "color_name": "gray",
+            "rgb": [
+                170,
+                109,
+                142
+            ],
+            "emotion": "Sadness",
+            "proportion": 66
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                217,
+                172,
+                198
+            ],
+            "emotion": "Happiness",
+            "proportion": 30
+        },
+        {
+            "color_name": "pink",
+            "rgb": [
+                189,
+                136,
+                165
+            ],
+            "emotion": "Happiness",
+            "proportion": 51
+        }
+    ],
+    "happy_face_3": [
+        {
+            "color_name": "pink",
+            "rgb": [
+                216,
+                166,
+                181
+            ],
+            "emotion": "Happiness",
+            "proportion": 33
+        },
+        {
+            "color_name": "purple",
+            "rgb": [
+                140,
+                78,
+                98
+            ],
+            "emotion": "Fear",
+            "proportion": 51
+        }
+    ]
+}

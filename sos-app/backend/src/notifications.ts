@@ -153,6 +153,49 @@ export async function notifySauvegardeAfterDirectorValidation(prisma: PrismaClie
   }
 }
 
+export async function notifyPsychologistsAfterDirectorSignedReports(prisma: PrismaClient, caseId: string) {
+  const c = await prisma.case.findUnique({
+    where: { id: caseId },
+    include: { village: true },
+  });
+  if (!c) return;
+
+  const users = await prisma.user.findMany({
+    where: {
+      role: Role.PSY,
+      villageId: c.villageId,
+    },
+    select: { id: true, email: true },
+  });
+
+  for (const user of users) {
+    const notifType = "DIR_SIGNED_REPORTS_READY_PSY";
+
+    const already = await prisma.notification.findFirst({
+      where: { userId: user.id, caseId: c.id, type: notifType },
+      select: { id: true },
+    });
+    if (already) continue;
+
+    if (user.email) {
+      await sendEmail(
+        user.email,
+        "Rapports signés par Directeur",
+        `Les rapports du signalement ${c.id} (${c.village.name}) ont été signés par le directeur et sont disponibles.`
+      );
+    }
+
+    await prisma.notification.create({
+      data: {
+        userId: user.id,
+        caseId: c.id,
+        type: notifType,
+        message: "Rapports signés par le directeur et transmis.",
+      },
+    });
+  }
+}
+
 export async function sendPending24hWhatsappReminders(prisma: PrismaClient) {
   const threshold = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const pendingCases = await prisma.case.findMany({
