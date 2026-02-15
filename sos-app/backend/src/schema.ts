@@ -13,6 +13,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    whatsappNumber: String
     role: Role!
     village: Village
   }
@@ -80,6 +81,35 @@ export const typeDefs = gql`
     readAt: String
   }
 
+  type AuditLogEntry {
+    id: ID!
+    createdAt: String!
+    action: String!
+    entity: String!
+    entityId: String!
+    actorName: String
+    actorEmail: String
+    metaJson: String
+  }
+
+  type CaseStatusCount {
+    status: CaseStatus!
+    count: Int!
+  }
+
+  type VillageCaseCount {
+    villageId: ID!
+    villageName: String!
+    count: Int!
+  }
+
+  type AdminStats {
+    totalCases: Int!
+    totalUsers: Int!
+    byStatus: [CaseStatusCount!]!
+    byVillage: [VillageCaseCount!]!
+  }
+
   type AuthPayload { token: String!, user: User! }
 
   input FileInput {
@@ -99,6 +129,15 @@ export const typeDefs = gql`
     attachments: [FileInput!]
   }
 
+  input AdminCreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+    role: Role!
+    villageId: ID
+    whatsappNumber: String
+  }
+
   type Query {
     me: User
     villages: [Village!]!
@@ -109,6 +148,9 @@ export const typeDefs = gql`
     psyAssignedCases(status: CaseStatus): [Case!]!
     dirVillageCases: [Case!]!
     sauvegardeCases: [Case!]!
+    adminStats: AdminStats!
+    adminLogs(limit: Int): [AuditLogEntry!]!
+    adminUsers: [User!]!
 
     myNotifications: [Notification!]!
   }
@@ -122,6 +164,8 @@ export const typeDefs = gql`
     psyUploadDocument(caseId: ID!, docType: DocumentType!, file: FileInput!): CaseDocument!
     dirVillageValidateCase(caseId: ID!, signatureFile: FileInput!): Case!
     sauvegardeValidateCase(caseId: ID!, signatureFile: FileInput!): Case!
+    adminCreateUser(input: AdminCreateUserInput!): User!
+    adminDeleteUser(userId: ID!): Boolean!
 
     markNotificationRead(id: ID!): Notification!
   }

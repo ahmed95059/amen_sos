@@ -12,6 +12,7 @@ import { typeDefs } from "./schema";
 import { resolvers } from "./resolvers";
 import { buildContext, prisma } from "./context";
 import { verifyJwt } from "./auth";
+import { startPendingReminderScheduler } from "./notifications";
 
 function getRequestToken(req: any) {
   const authHeader = req.headers?.authorization || "";
@@ -57,6 +58,7 @@ async function canReadCase(user: { id: string; role: Role; villageId?: string | 
   }
 
   if (user.role === Role.RESPONSABLE_SAUVEGARDE) return true;
+  if (user.role === Role.ADMIN_IT) return false;
 
   return true;
 }
@@ -148,6 +150,7 @@ async function main() {
 
   const port = Number(process.env.PORT || "4000");
   await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+  startPendingReminderScheduler(prisma);
   console.log(`GraphQL ready at http://localhost:${port}/graphql`);
 }
 

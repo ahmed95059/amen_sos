@@ -62,6 +62,7 @@ model User {
   id           String @id @default(cuid())
   name         String
   email        String @unique
+  whatsappNumber String?
   passwordHash String
   role         Role
   villageId    String?

@@ -42,6 +42,7 @@ async function main() {
       passwordHash: password,
       role: Role.PSY,
       villageId: v1.id,
+      whatsappNumber: "+21620000001",
     },
     create: {
       name: "Psy One",
@@ -49,6 +50,7 @@ async function main() {
       passwordHash: password,
       role: Role.PSY,
       villageId: v1.id,
+      whatsappNumber: "+21620000001",
     },
   });
 
@@ -59,6 +61,7 @@ async function main() {
       passwordHash: password,
       role: Role.PSY,
       villageId: v2.id,
+      whatsappNumber: "+21620000002",
     },
     create: {
       name: "Psy Two",
@@ -66,6 +69,7 @@ async function main() {
       passwordHash: password,
       role: Role.PSY,
       villageId: v2.id,
+      whatsappNumber: "+21620000002",
     },
   });
 
@@ -124,6 +128,23 @@ async function main() {
     },
   });
 
+  await prisma.user.upsert({
+    where: { email: "admin.it@sos.tn" },
+    update: {
+      name: "Admin IT",
+      passwordHash: password,
+      role: Role.ADMIN_IT,
+      villageId: null,
+    },
+    create: {
+      name: "Admin IT",
+      email: "admin.it@sos.tn",
+      passwordHash: password,
+      role: Role.ADMIN_IT,
+      villageId: null,
+    },
+  });
+
   console.log("Seed done. Users:");
   console.log("- decl1@sos.tn / password123");
   console.log("- psy1@sos.tn / password123");
@@ -131,6 +152,7 @@ async function main() {
   console.log("- dir.tunis@sos.tn / password123");
   console.log("- dir.sousse@sos.tn / password123");
   console.log("- resp.sauvegarde@sos.tn / password123");
+  console.log("- admin.it@sos.tn / password123");
 }
 
 main()

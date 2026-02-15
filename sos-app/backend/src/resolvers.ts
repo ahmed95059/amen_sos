@@ -4,6 +4,12 @@ import { verifyPassword, signJwt } from "./auth";
 import { computeScore } from "./scoring";
 import { assignTwoPsychologists } from "./assignment";
 import { saveFileToDisk, FileInput } from "./storage";
+import bcrypt from "bcryptjs";
+import {
+  notifyPsychologistsOnCaseCreated,
+  notifyDirectorWhenPsyDocsReady,
+  notifySauvegardeAfterDirectorValidation,
+} from "./notifications";
 
 export const resolvers = {
   Query: {
@@ -25,6 +31,7 @@ export const resolvers = {
 
     caseById: async (_: any, args: { id: string }, ctx: Context) => {
       const u = requireAuth(ctx);
+      if (u.role === Role.ADMIN_IT) throw new Error("FORBIDDEN");
       const c = await ctx.prisma.case.findUnique({
         where: { id: args.id },
         include: baseCaseIncludes(),
@@ -85,6 +92,73 @@ export const resolvers = {
         },
         orderBy: [{ score: "desc" }, { createdAt: "asc" }],
         include: baseCaseIncludes(),
+      });
+    },
+
+    adminStats: async (_: any, __: any, ctx: Context) => {
+      requireRole(ctx, [Role.ADMIN_IT]);
+
+      const [totalCases, totalUsers, byStatusRaw, byVillageRaw] = await Promise.all([
+        ctx.prisma.case.count(),
+        ctx.prisma.user.count(),
+        ctx.prisma.case.groupBy({
+          by: ["status"],
+          _count: { status: true },
+        }),
+        ctx.prisma.case.groupBy({
+          by: ["villageId"],
+          _count: { villageId: true },
+        }),
+      ]);
+
+      const villages = await ctx.prisma.village.findMany({
+        select: { id: true, name: true },
+      });
+      const villageNameById = new Map(villages.map((v) => [v.id, v.name]));
+
+      return {
+        totalCases,
+        totalUsers,
+        byStatus: byStatusRaw.map((x) => ({ status: x.status, count: x._count.status })),
+        byVillage: byVillageRaw.map((x) => ({
+          villageId: x.villageId,
+          villageName: villageNameById.get(x.villageId) || x.villageId,
+          count: x._count.villageId,
+        })),
+      };
+    },
+
+    adminLogs: async (_: any, args: { limit?: number }, ctx: Context) => {
+      requireRole(ctx, [Role.ADMIN_IT]);
+      const limit = Math.max(1, Math.min(500, Number(args.limit || 100)));
+
+      const logs = await ctx.prisma.auditLog.findMany({
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        include: {
+          actor: {
+            select: { name: true, email: true },
+          },
+        },
+      });
+
+      return logs.map((l) => ({
+        id: l.id,
+        createdAt: l.createdAt.toISOString(),
+        action: l.action,
+        entity: l.entity,
+        entityId: l.entityId,
+        actorName: l.actor?.name ?? null,
+        actorEmail: l.actor?.email ?? null,
+        metaJson: l.metaJson ?? null,
+      }));
+    },
+
+    adminUsers: async (_: any, __: any, ctx: Context) => {
+      requireRole(ctx, [Role.ADMIN_IT]);
+      return ctx.prisma.user.findMany({
+        orderBy: [{ role: "asc" }, { email: "asc" }],
+        include: { village: true },
       });
     },
 
@@ -187,6 +261,7 @@ export const resolvers = {
       }
 
       await assignTwoPsychologists(ctx.prisma, created.id, created.villageId);
+      await notifyPsychologistsOnCaseCreated(ctx.prisma, created.id);
 
       await ctx.prisma.auditLog.create({
         data: {
@@ -283,6 +358,8 @@ export const resolvers = {
         },
       });
 
+      await notifyDirectorWhenPsyDocsReady(ctx.prisma, args.caseId);
+
       return doc;
     },
 
@@ -326,6 +403,8 @@ export const resolvers = {
           metaJson: JSON.stringify({ signatureFile: savedSignature.filename }),
         },
       });
+
+      await notifySauvegardeAfterDirectorValidation(ctx.prisma, args.caseId);
 
       return updated;
     },
@@ -389,6 +468,72 @@ export const resolvers = {
       });
 
       return updated;
+    },
+
+    adminCreateUser: async (_: any, args: { input: any }, ctx: Context) => {
+      requireRole(ctx, [Role.ADMIN_IT]);
+      const input = args.input as {
+        name: string;
+        email: string;
+        password: string;
+        role: Role;
+        villageId?: string | null;
+        whatsappNumber?: string | null;
+      };
+
+      const email = String(input.email || "").trim().toLowerCase();
+      const name = String(input.name || "").trim();
+      const password = String(input.password || "");
+      if (!email || !name || !password) throw new Error("INVALID_INPUT");
+      if (password.length < 8) throw new Error("PASSWORD_TOO_SHORT");
+      if (input.role === Role.ADMIN_IT) throw new Error("ADMIN_CREATE_ADMIN_FORBIDDEN");
+
+      const villageRequiredRoles = [Role.DECLARANT, Role.PSY, Role.DIR_VILLAGE];
+      const villageId = input.villageId ?? null;
+      const whatsappNumber = input.whatsappNumber ? String(input.whatsappNumber).trim() : null;
+      if (villageRequiredRoles.includes(input.role) && !villageId) throw new Error("VILLAGE_REQUIRED");
+      if (!villageRequiredRoles.includes(input.role) && villageId) throw new Error("VILLAGE_NOT_ALLOWED_FOR_ROLE");
+
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      try {
+        return await ctx.prisma.user.create({
+          data: {
+            name,
+            email,
+            passwordHash,
+            role: input.role,
+            villageId,
+            whatsappNumber,
+          },
+          include: { village: true },
+        });
+      } catch {
+        throw new Error("USER_CREATE_FAILED");
+      }
+    },
+
+    adminDeleteUser: async (_: any, args: { userId: string }, ctx: Context) => {
+      const admin = requireRole(ctx, [Role.ADMIN_IT]);
+      if (args.userId === admin.id) throw new Error("CANNOT_DELETE_SELF");
+
+      const target = await ctx.prisma.user.findUnique({
+        where: { id: args.userId },
+        select: { id: true, email: true },
+      });
+      if (!target) return false;
+
+      const relatedCount =
+        (await ctx.prisma.case.count({ where: { createdById: args.userId } })) +
+        (await ctx.prisma.caseAssignment.count({ where: { psychologistId: args.userId } })) +
+        (await ctx.prisma.caseDocument.count({ where: { uploadedById: args.userId } })) +
+        (await ctx.prisma.attachment.count({ where: { uploadedById: args.userId } })) +
+        (await ctx.prisma.notification.count({ where: { userId: args.userId } })) +
+        (await ctx.prisma.auditLog.count({ where: { actorId: args.userId } }));
+      if (relatedCount > 0) throw new Error("USER_HAS_RELATED_DATA");
+
+      await ctx.prisma.user.delete({ where: { id: args.userId } });
+      return true;
     },
 
     markNotificationRead: async (_: any, args: { id: string }, ctx: Context) => {

@@ -12,6 +12,11 @@ import {
   SAUVEGARDE_CASES,
   DIR_VILLAGE_VALIDATE_CASE,
   SAUVEGARDE_VALIDATE_CASE,
+  ADMIN_STATS,
+  ADMIN_LOGS,
+  ADMIN_USERS,
+  ADMIN_CREATE_USER,
+  ADMIN_DELETE_USER,
 } from "./ops";
 import { clearToken, getToken, setToken } from "./auth";
 
@@ -78,7 +83,7 @@ function mergeUniqueFiles(existing: File[], incoming: File[]) {
 export default function App() {
   const [email, setEmail] = useState("decl1@sos.tn");
   const [password, setPassword] = useState("password123");
-  const [roleView, setRoleView] = useState<"DECLARANT" | "PSY" | "DIR_VILLAGE" | "RESPONSABLE_SAUVEGARDE">("DECLARANT");
+  const [roleView, setRoleView] = useState<"DECLARANT" | "PSY" | "DIR_VILLAGE" | "RESPONSABLE_SAUVEGARDE" | "ADMIN_IT">("DECLARANT");
 
   const [login, loginState] = useMutation(LOGIN, {
     onCompleted: (data) => {
@@ -110,6 +115,37 @@ export default function App() {
   });
   const [sauvegardeValidateCase] = useMutation(SAUVEGARDE_VALIDATE_CASE, { onCompleted: () => refetchSauvegardeCases() });
 
+  const { data: adminStatsData, error: adminStatsError, refetch: refetchAdminStats } = useQuery(ADMIN_STATS, {
+    skip: roleView !== "ADMIN_IT",
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
+  const { data: adminLogsData, error: adminLogsError, refetch: refetchAdminLogs } = useQuery(ADMIN_LOGS, {
+    skip: roleView !== "ADMIN_IT",
+    variables: { limit: 200 },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
+  const { data: adminUsersData, error: adminUsersError, refetch: refetchAdminUsers } = useQuery(ADMIN_USERS, {
+    skip: roleView !== "ADMIN_IT",
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
+  const [adminCreateUser] = useMutation(ADMIN_CREATE_USER, {
+    onCompleted: () => {
+      refetchAdminUsers();
+      refetchAdminStats();
+      refetchAdminLogs();
+    },
+  });
+  const [adminDeleteUser] = useMutation(ADMIN_DELETE_USER, {
+    onCompleted: () => {
+      refetchAdminUsers();
+      refetchAdminStats();
+      refetchAdminLogs();
+    },
+  });
+
   const villages = villagesData?.villages ?? [];
   const [villageId, setVillageId] = useState<string>("");
   const [isAnon, setIsAnon] = useState(true);
@@ -119,6 +155,12 @@ export default function App() {
   const [abuserName, setAbuserName] = useState("");
   const [description, setDescription] = useState("");
   const [attachFiles, setAttachFiles] = useState<File[]>([]);
+  const [adminName, setAdminName] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPass, setAdminPass] = useState("password123");
+  const [adminRole, setAdminRole] = useState("DECLARANT");
+  const [adminVillageId, setAdminVillageId] = useState("");
+  const [adminWhatsapp, setAdminWhatsapp] = useState("");
 
   return (
     <div style={{ fontFamily: "system-ui", padding: 16, maxWidth: 1000, margin: "0 auto" }}>
@@ -129,6 +171,7 @@ export default function App() {
         <button onClick={() => setRoleView("PSY")}>Vue Psychologue</button>
         <button onClick={() => setRoleView("DIR_VILLAGE")}>Vue Directeur Village</button>
         <button onClick={() => setRoleView("RESPONSABLE_SAUVEGARDE")}>Vue Responsable Sauvegarde</button>
+        <button onClick={() => setRoleView("ADMIN_IT")}>Vue Admin</button>
         <button
           onClick={() => {
             clearToken();
@@ -148,7 +191,7 @@ export default function App() {
             Se connecter
           </button>
           <span style={{ color: "#666" }}>
-            comptes seed: decl1@sos.tn / psy1@sos.tn / psy2@sos.tn / dir.tunis@sos.tn / dir.sousse@sos.tn / resp.sauvegarde@sos.tn (password123)
+            comptes seed: decl1@sos.tn / psy1@sos.tn / psy2@sos.tn / dir.tunis@sos.tn / dir.sousse@sos.tn / resp.sauvegarde@sos.tn / admin.it@sos.tn (password123)
           </span>
         </div>
         {loginState.error && <div style={{ color: "crimson" }}>{String(loginState.error.message)}</div>}
@@ -394,6 +437,127 @@ export default function App() {
                 }}
               />
             ))}
+          </div>
+        </div>
+      )}
+
+      {roleView === "ADMIN_IT" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+          <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
+            <h3>Admin IT - Statistiques</h3>
+            <button
+              onClick={() => {
+                refetchAdminStats();
+                refetchAdminLogs();
+                refetchAdminUsers();
+              }}
+            >
+              Rafraîchir
+            </button>
+            {adminStatsError && <div style={{ color: "crimson" }}>{String(adminStatsError.message)}</div>}
+            {adminLogsError && <div style={{ color: "crimson" }}>{String(adminLogsError.message)}</div>}
+            {adminUsersError && <div style={{ color: "crimson" }}>{String(adminUsersError.message)}</div>}
+            <div style={{ marginTop: 8 }}>Total signalements: <b>{adminStatsData?.adminStats?.totalCases ?? 0}</b></div>
+            <div>Total utilisateurs: <b>{adminStatsData?.adminStats?.totalUsers ?? 0}</b></div>
+            <div style={{ marginTop: 8 }}>
+              <b>Par statut</b>
+              <ul>
+                {(adminStatsData?.adminStats?.byStatus ?? []).map((x: any) => (
+                  <li key={x.status}>{statusLabel(x.status)}: {x.count}</li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <b>Par village</b>
+              <ul>
+                {(adminStatsData?.adminStats?.byVillage ?? []).map((x: any) => (
+                  <li key={x.villageId}>{x.villageName}: {x.count}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
+            <h3>Admin IT - Ajouter utilisateur</h3>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <input value={adminName} onChange={(e) => setAdminName(e.target.value)} placeholder="Nom" />
+              <input value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="Email" />
+              <input value={adminPass} onChange={(e) => setAdminPass(e.target.value)} placeholder="Mot de passe" type="password" />
+              <input value={adminWhatsapp} onChange={(e) => setAdminWhatsapp(e.target.value)} placeholder="WhatsApp (+216...)" />
+              <select value={adminRole} onChange={(e) => setAdminRole(e.target.value)}>
+                {["DECLARANT", "PSY", "DIR_VILLAGE", "RESPONSABLE_SAUVEGARDE"].map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+              <select value={adminVillageId} onChange={(e) => setAdminVillageId(e.target.value)}>
+                <option value="">Village (si nécessaire)</option>
+                {villages.map((v: any) => (
+                  <option key={v.id} value={v.id}>{v.name}</option>
+                ))}
+              </select>
+              <button
+                onClick={async () => {
+                  try {
+                    await adminCreateUser({
+                      variables: {
+                        input: {
+                          name: adminName,
+                          email: adminEmail,
+                          password: adminPass,
+                          role: adminRole,
+                          villageId: adminVillageId || null,
+                          whatsappNumber: adminWhatsapp || null,
+                        },
+                      },
+                    });
+                    setAdminName("");
+                    setAdminEmail("");
+                    setAdminPass("password123");
+                    setAdminVillageId("");
+                    setAdminWhatsapp("");
+                  } catch (e: any) {
+                    alert(`Création échouée: ${String(e?.message || e)}`);
+                  }
+                }}
+              >
+                Ajouter
+              </button>
+            </div>
+          </div>
+
+          <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
+            <h3>Admin IT - Utilisateurs</h3>
+            <ul>
+              {(adminUsersData?.adminUsers ?? []).map((u: any) => (
+                <li key={u.id} style={{ marginTop: 6 }}>
+                  {u.email} ({u.role}) {u.village ? `- ${u.village.name}` : ""} {u.whatsappNumber ? `- WA: ${u.whatsappNumber}` : ""}
+                  {" "}
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Supprimer ${u.email} ?`)) return;
+                      try {
+                        await adminDeleteUser({ variables: { userId: u.id } });
+                      } catch (e: any) {
+                        alert(`Suppression échouée: ${String(e?.message || e)}`);
+                      }
+                    }}
+                  >
+                    Supprimer
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
+            <h3>Admin IT - Logs</h3>
+            <ul>
+              {(adminLogsData?.adminLogs ?? []).map((l: any) => (
+                <li key={l.id} style={{ marginTop: 6 }}>
+                  [{formatDateTime(l.createdAt)}] {l.action} - {l.entity} ({l.entityId}) - {l.actorEmail || l.actorName || "-"}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}

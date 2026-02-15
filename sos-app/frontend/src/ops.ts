@@ -118,3 +118,61 @@ export const SAUVEGARDE_VALIDATE_CASE = gql`
     }
   }
 `;
+
+export const ADMIN_STATS = gql`
+  query AdminStats {
+    adminStats {
+      totalCases
+      totalUsers
+      byStatus { status count }
+      byVillage { villageId villageName count }
+    }
+  }
+`;
+
+export const ADMIN_LOGS = gql`
+  query AdminLogs($limit: Int) {
+    adminLogs(limit: $limit) {
+      id
+      createdAt
+      action
+      entity
+      entityId
+      actorName
+      actorEmail
+      metaJson
+    }
+  }
+`;
+
+export const ADMIN_USERS = gql`
+  query AdminUsers {
+    adminUsers {
+      id
+      name
+      email
+      whatsappNumber
+      role
+      village { id name }
+    }
+  }
+`;
+
+export const ADMIN_CREATE_USER = gql`
+  mutation AdminCreateUser($input: AdminCreateUserInput!) {
+    adminCreateUser(input: $input) {
+      id
+      name
+      email
+      whatsappNumber
+      role
+      village { id name }
+    }
+  }
+`;
+
+export const ADMIN_DELETE_USER = gql`
+  mutation AdminDeleteUser($userId: ID!) {
+    adminDeleteUser(userId: $userId)
+  }
+`;
