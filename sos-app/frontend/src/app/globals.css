@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* Google Fonts - MUST come after @import "tailwindcss" */
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+}
+
+/* SOS Children's Villages Brand Colors - Official Palette */
+:root {
+  /* Primary Blue - Official SOS Theme */
+  --sos-blue: #00abec;
+  --sos-blue-medium: #84ccf1;
+  --sos-blue-light: #cde8f8;
+  --sos-blue-lighter: #e4f3fb;
+  
+  /* Dark Blue (Navy) - Official SOS Theme */
+  --sos-navy: #1c325d;
+  --sos-navy-medium: #78849e;
+  --sos-navy-light: #b3c3cf;
+  
+  /* Accent Red - Official SOS Theme */
+  --sos-red: #de5a6c;
+  --sos-red-medium: #eba9a9;
+  --sos-red-light: #f1c9c6;
+  --sos-red-lighter: #f9e5e4;
+  
+  /* Neutral Colors */
+  --background: #ffffff;
+  --foreground: #1c325d;
+  --card: #ffffff;
+  --card-foreground: #1c325d;
+  --primary: #00abec;
+  --primary-foreground: #ffffff;
+  --secondary: #e4f3fb;
+  --secondary-foreground: #1c325d;
+  --muted: #f5f7fa;
+  --muted-foreground: #78849e;
+  --accent: #de5a6c;
+  --accent-foreground: #ffffff;
+  --destructive: #de5a6c;
+  --destructive-foreground: #ffffff;
+  --border: #cde8f8;
+  --input: #e4f3fb;
+  --ring: #00abec;
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Poppins', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@layer components {
+  /* SOS Red Color Utilities */
+  .sos-red-100 {
+    @apply bg-[#f9e5e4];
+  }
+  
+  .sos-red-text {
+    @apply text-[#de5a6c];
+  }
+  
+  .sos-red-bg {
+    @apply bg-[#de5a6c];
+  }
+  
+  .sos-red-light-50 {
+    @apply bg-[#f9e5e4] text-[#de5a6c];
+  }
+  
+  .sos-red-light-100 {
+    @apply bg-[#f1c9c6] text-[#de5a6c];
+  }
+
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
