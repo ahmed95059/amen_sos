@@ -1,0 +1,2 @@
+sos-app/models/speech2text/vosk-model-small-ar-tn-0.1-linto/am/final.mdl filter=lfs diff=lfs merge=lfs -text
+sos-app/models/speech2text/vosk-model-small-ar-tn-0.1-linto/graph/Gr.fst filter=lfs diff=lfs merge=lfs -text
