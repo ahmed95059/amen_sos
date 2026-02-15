@@ -26,6 +26,12 @@ export default function CreateTicketPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [transcribingMediaIndex, setTranscribingMediaIndex] = useState<number | null>(null);
+  const [transcriptError, setTranscriptError] = useState('');
+  const [mediaTranscriptError, setMediaTranscriptError] = useState('');
+  const [lastTranscript, setLastTranscript] = useState('');
+  const [lastImportedTranscript, setLastImportedTranscript] = useState('');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -207,6 +213,8 @@ export default function CreateTicketPage() {
   // Voice Recording Handlers
   const startRecording = async () => {
     try {
+      setTranscriptError('');
+      setLastTranscript('');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
@@ -217,7 +225,7 @@ export default function CreateTicketPage() {
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+        const blob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType || 'audio/webm' });
         setAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
       };
@@ -257,9 +265,110 @@ export default function CreateTicketPage() {
   const deleteRecording = () => {
     setAudioBlob(null);
     setIsPlayingAudio(false);
+    setTranscriptError('');
+    setLastTranscript('');
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
+    }
+  };
+
+  const mapSpeechToTextError = (code: string) => {
+    if (code === 'SPEECH2TEXT_SERVICE_UNREACHABLE') {
+      return 'Service Speech-to-Text indisponible. Lancez models/speech2text.';
+    }
+    if (code === 'SPEECH2TEXT_EMPTY_TRANSCRIPT') {
+      return 'Aucune parole detectee dans cet audio.';
+    }
+    if (code === 'SESSION_EXPIRED') {
+      return 'Session expiree. Reconnectez-vous.';
+    }
+    return code || 'SPEECH2TEXT_FAILED';
+  };
+
+  const requestSpeechToText = async (audioFile: File) => {
+    const token = getAuthToken();
+    if (!token) throw new Error('SESSION_EXPIRED');
+
+    const base64 = await fileToBase64(audioFile);
+    const graphUrl = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:4000/graphql';
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || graphUrl.replace(/\/graphql\/?$/, '');
+
+    const response = await fetch(`${apiBase}/speech2text/transcribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        filename: audioFile.name,
+        mimeType: audioFile.type || 'audio/webm',
+        base64,
+        language: 'ar-tn',
+      }),
+    });
+
+    const payload = (await response.json().catch(() => ({}))) as { text?: string; error?: string; detail?: string };
+    if (!response.ok) {
+      throw new Error(payload.error || payload.detail || 'SPEECH2TEXT_FAILED');
+    }
+
+    const text = String(payload.text || '').trim();
+    if (!text) throw new Error('SPEECH2TEXT_EMPTY_TRANSCRIPT');
+    return text;
+  };
+
+  const isAudioFile = (file: File) => {
+    const name = file.name.toLowerCase();
+    if ((file.type || '').startsWith('audio/')) return true;
+    return ['.mp3', '.wav', '.m4a', '.ogg', '.webm', '.aac', '.flac', '.opus'].some((ext) => name.endsWith(ext));
+  };
+
+  const transcribeRecording = async () => {
+    if (!audioBlob) return;
+    setIsTranscribing(true);
+    setTranscriptError('');
+
+    try {
+      const audioFile = new File([audioBlob], `recording-${Date.now()}.webm`, {
+        type: audioBlob.type || 'audio/webm',
+      });
+      const text = await requestSpeechToText(audioFile);
+
+      setLastTranscript(text);
+      setFormData((prev) => ({
+        ...prev,
+        description: prev.description
+          ? `${prev.description}\n\n[Transcription enregistrement vocal]\n${text}`
+          : `[Transcription enregistrement vocal]\n${text}`,
+      }));
+    } catch (error) {
+      const code = error instanceof Error ? error.message : 'SPEECH2TEXT_FAILED';
+      setTranscriptError(mapSpeechToTextError(code));
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
+  const transcribeImportedAudio = async (file: File, index: number) => {
+    if (!isAudioFile(file)) return;
+    setTranscribingMediaIndex(index);
+    setMediaTranscriptError('');
+
+    try {
+      const text = await requestSpeechToText(file);
+      setLastImportedTranscript(text);
+      setFormData((prev) => ({
+        ...prev,
+        description: prev.description
+          ? `${prev.description}\n\n[Transcription audio: ${file.name}]\n${text}`
+          : `[Transcription audio: ${file.name}]\n${text}`,
+      }));
+    } catch (error) {
+      const code = error instanceof Error ? error.message : 'SPEECH2TEXT_FAILED';
+      setMediaTranscriptError(mapSpeechToTextError(code));
+    } finally {
+      setTranscribingMediaIndex(null);
     }
   };
 
@@ -330,7 +439,7 @@ export default function CreateTicketPage() {
               <AlertCircle className="h-12 w-12 text-[#de5a6c] mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Accès Refusé</h2>
               <p className="text-gray-500">
-                Vous n'avez pas la permission de créer des tickets.
+                Vous n&apos;avez pas la permission de créer des tickets.
               </p>
               <Link href="/dashboard">
                 <Button className="mt-4">Retour au tableau de bord</Button>
@@ -550,7 +659,7 @@ export default function CreateTicketPage() {
                   </label>
                   <p className="text-xs text-[#00abec] mt-1">
                     Cochez cette case si le ticket contient des informations sensibles qui nécessitent 
-                    des restrictions d'accès particulières.
+                    des restrictions d&apos;accès particulières.
                   </p>
                 </div>
               </div>
@@ -604,16 +713,40 @@ export default function CreateTicketPage() {
                               <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                             </div>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => removeMediaFile(index)}
-                            className="p-1 hover:bg-[#f9e5e4] rounded transition-colors"
-                          >
-                            <X className="h-4 w-4 text-[#de5a6c]" />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            {isAudioFile(file) && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => void transcribeImportedAudio(file, index)}
+                                disabled={transcribingMediaIndex === index}
+                                className="border-[#00abec] text-[#00abec] hover:bg-[#e4f3fb]"
+                              >
+                                <Mic className="h-4 w-4 mr-1" />
+                                {transcribingMediaIndex === index ? 'Transcription...' : 'Transcrire'}
+                              </Button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeMediaFile(index)}
+                              className="p-1 hover:bg-[#f9e5e4] rounded transition-colors"
+                            >
+                              <X className="h-4 w-4 text-[#de5a6c]" />
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
+                    {mediaTranscriptError && (
+                      <p className="text-xs text-[#de5a6c]">{mediaTranscriptError}</p>
+                    )}
+                    {lastImportedTranscript && (
+                      <div className="rounded-lg border border-[#cde8f8] bg-white p-2">
+                        <p className="text-xs text-gray-500 mb-1">Derniere transcription audio importee:</p>
+                        <p className="text-sm text-gray-700 break-words">{lastImportedTranscript}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -675,6 +808,27 @@ export default function CreateTicketPage() {
                         </button>
                       </div>
                       <audio ref={audioRef} className="hidden" />
+                      <div className="flex items-center justify-center">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => void transcribeRecording()}
+                          disabled={isTranscribing}
+                          className="border-[#00abec] text-[#00abec] hover:bg-[#e4f3fb]"
+                        >
+                          <Mic className="h-4 w-4 mr-1" />
+                          {isTranscribing ? 'Transcription...' : 'Transcrire vers description'}
+                        </Button>
+                      </div>
+                      {transcriptError && (
+                        <p className="text-xs text-[#de5a6c] text-center">{transcriptError}</p>
+                      )}
+                      {lastTranscript && (
+                        <div className="rounded-lg border border-[#cde8f8] bg-white p-2">
+                          <p className="text-xs text-gray-500 mb-1">Derniere transcription:</p>
+                          <p className="text-sm text-gray-700 break-words">{lastTranscript}</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

@@ -13,6 +13,8 @@ import { resolvers } from "./resolvers";
 import { buildContext, prisma } from "./context";
 import { verifyJwt } from "./auth";
 import { startPendingReminderScheduler } from "./notifications";
+import { runAssistantChat, runDrawingAnalysis } from "./assistant";
+import { transcribeWithSpeechService } from "./speech2text";
 
 function getRequestToken(req: any) {
   const authHeader = req.headers?.authorization || "";
@@ -130,6 +132,101 @@ async function main() {
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: "INTERNAL_ERROR" });
+    }
+  });
+
+  app.post("/assistant/chat", async (req, res) => {
+    try {
+      const user = jwtSecret ? await getAuthUser(req, jwtSecret) : null;
+      if (!user) return res.status(401).json({ error: "UNAUTHENTICATED" });
+      if (user.role !== Role.DECLARANT) return res.status(403).json({ error: "FORBIDDEN" });
+
+      const body = req.body as { message?: string; history?: Array<{ role: "user" | "assistant"; text: string }> };
+      const result = await runAssistantChat({
+        message: body?.message || "",
+        history: Array.isArray(body?.history) ? body.history : [],
+      });
+
+      return res.json(result);
+    } catch (e: any) {
+      const code = e instanceof Error ? e.message : "ASSISTANT_CHAT_FAILED";
+      if (code === "ASSISTANT_MESSAGE_REQUIRED") {
+        return res.status(400).json({ error: code });
+      }
+      if (code === "MODELE_RAG_UNREACHABLE" || code === "MODELE_RAG_EMPTY_RESPONSE") {
+        return res.status(503).json({ error: code });
+      }
+      console.error("[assistant/chat]", e);
+      return res.status(500).json({ error: code || "ASSISTANT_CHAT_FAILED" });
+    }
+  });
+
+  app.post("/assistant/drawing-analysis", async (req, res) => {
+    try {
+      const user = jwtSecret ? await getAuthUser(req, jwtSecret) : null;
+      if (!user) return res.status(401).json({ error: "UNAUTHENTICATED" });
+      if (user.role !== Role.DECLARANT) return res.status(403).json({ error: "FORBIDDEN" });
+
+      const body = req.body as { imageBase64?: string; mimeType?: string; note?: string };
+      const result = await runDrawingAnalysis({
+        imageBase64: body?.imageBase64 || "",
+        mimeType: body?.mimeType || "image/png",
+        note: body?.note || "",
+      });
+
+      return res.json(result);
+    } catch (e: any) {
+      const code = e instanceof Error ? e.message : "ASSISTANT_DRAWING_ANALYSIS_FAILED";
+      if (code === "ASSISTANT_IMAGE_REQUIRED" || code === "ASSISTANT_IMAGE_TOO_LARGE") {
+        return res.status(400).json({ error: code });
+      }
+      if (
+        code === "EMOTIONAL_MODEL_SCRIPT_NOT_FOUND" ||
+        code === "EMOTIONAL_MODEL_EXEC_FAILED" ||
+        code === "EMOTIONAL_MODEL_OUTPUT_NOT_FOUND"
+      ) {
+        return res.status(503).json({ error: code });
+      }
+      console.error("[assistant/drawing-analysis]", e);
+      return res.status(500).json({ error: code || "ASSISTANT_DRAWING_ANALYSIS_FAILED" });
+    }
+  });
+
+  app.post("/speech2text/transcribe", async (req, res) => {
+    try {
+      const user = jwtSecret ? await getAuthUser(req, jwtSecret) : null;
+      if (!user) return res.status(401).json({ error: "UNAUTHENTICATED" });
+      if (user.role === Role.ADMIN_IT || user.role === Role.DIR_NATIONAL) {
+        return res.status(403).json({ error: "FORBIDDEN" });
+      }
+
+      const body = req.body as {
+        filename?: string;
+        mimeType?: string;
+        base64?: string;
+        language?: string;
+      };
+
+      const serviceUrl = process.env.SPEECH2TEXT_API_URL || "http://127.0.0.1:7001";
+      const result = await transcribeWithSpeechService({
+        serviceUrl,
+        filename: body?.filename || "recording.webm",
+        mimeType: body?.mimeType || "audio/webm",
+        base64: body?.base64 || "",
+        language: body?.language || "ar-tn",
+      });
+
+      return res.json(result);
+    } catch (e: any) {
+      const code = e instanceof Error ? e.message : "SPEECH2TEXT_FAILED";
+      const status =
+        code === "SPEECH2TEXT_AUDIO_REQUIRED" ? 400 :
+        code === "SPEECH2TEXT_EMPTY_TRANSCRIPT" ? 422 :
+        code === "SPEECH2TEXT_SERVICE_UNREACHABLE" ? 503 :
+        code === "SPEECH2TEXT_URL_NOT_CONFIGURED" ? 500 :
+        502;
+      console.error("[speech2text/transcribe]", e);
+      return res.status(status).json({ error: code });
     }
   });
 
